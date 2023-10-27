@@ -2,6 +2,7 @@
 #include <iostream>
 #include "time.cpp"
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 class Seat {
@@ -203,9 +204,9 @@ public:
     }
 
     void PrintInfo() { // вывод информации о кинозале
-        cout << "Name: " << name_hall << '\t' << "Line: " << line << '\t' <<
-            "Seat: " << seat << '\t' <<
-            "Type: " << type << '\n';
+        cout << left << "Name: " << setw(5) << name_hall << '\t' << "Line: " << setw(3) << line << '\t' <<
+            "Seat: " << setw(3) << seat << '\t' << 
+            "Type: " << setw(8) << type;
     }
 
     void randomFillSeats() { // рандомно сажаем людей :)

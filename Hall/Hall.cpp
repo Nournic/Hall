@@ -1,12 +1,12 @@
 ﻿#include <iostream>
 #include <string>
-#include <cstdlib>
 #include "classes.cpp"
 #include <ctime>
 #pragma warning(disable : 4996)
 #include <algorithm>
 #include <limits>
 #include <set>
+#include <cstdlib>
 
 using namespace std;
 
@@ -39,6 +39,7 @@ int main() {
     bool anotherfilm;
     unsigned number_film;
     set<unsigned> listHallsWithCurrentFilm;
+    unsigned choose_day;
 
 
     //Раздача случайно длительности фильмам из массива с именами фильмов
@@ -50,19 +51,31 @@ int main() {
     cout << "Вид от кассира" << endl;
     cout << "Введите количество кинозалов -> "; // проверки нет, но подразумевается, что их 3-5.
     cin >> hallsValue;
+    cout << "Хотите случайно заполнить залы? (Y/N): ";
+    cin >> otvet;
     Hall* hallsList = new Hall[hallsValue];; //Массив с залами, размер задан hallsValue
-    for (unsigned i{}; i != hallsValue; i++) {
-        cout << "Введите название для кинозала " << i + 1 << " зала -> ";
-        string name; cin >> name;
-        hallsList[i].SetName(name); // установка имени зала.
-        cout << "Выберите тип зала ('g' - обычный, 's' - с диванами, 'v' - VIP, 'c' - детский) -> ";
-        char tp; cin >> tp; // установка типа зала.
-        hallsList[i].SetType(typeSelect(tp));
-        cinemaHall(i + 1, hallsList); // задаем параметры количества мест и рядов для каждого объекта в массиве, собств. матрицы.
+    if (otvet == 'Y') {
+        for (unsigned i{}; i != hallsValue; i++) {
+            hallsList[i].SetName(to_string(i+1));
+            hallsList[i].SetMatrix(5 + rand() % 10, 5 + rand() % 10);
+            hallsList[i].SetType("general");
+        }
+    }
+    else {
+        for (unsigned i{}; i != hallsValue; i++) {
+            cout << "Введите название для кинозала " << i + 1 << " зала -> ";
+            string name; cin >> name;
+            hallsList[i].SetName(name); // установка имени зала.
+            cout << "Выберите тип зала ('g' - обычный, 's' - с диванами, 'v' - VIP, 'c' - детский) -> ";
+            char tp; cin >> tp; // установка типа зала.
+            hallsList[i].SetType(typeSelect(tp));
+            cinemaHall(i + 1, hallsList); // задаем параметры количества мест и рядов для каждого объекта в массиве, собств. матрицы.
+        }
     }
     cout << "Структура кинозалов настроена. Введённые данные:" << endl;
     for (unsigned i{}; i != hallsValue; i++) {
         hallsList[i].PrintInfo(); // метод вывода информации, чтобы увидеть результат.
+        cout << endl;
     }
     system("pause");
     system("cls");
@@ -120,7 +133,6 @@ int main() {
 
                 }
             }
-
             if (choosefilmtoday == 'Y' && anotherday == false) {
                 //Вывод фильмов на сегодня, с учётом нынешнего времени
                 /*for (size_t i{}; i != 8; ++i) {
@@ -183,9 +195,9 @@ int main() {
                     
                 }
                 if (continue_inspection == 1) {
-                    again = true;
+                    anotherday = true;
                 }
-                if (again == false) {
+                if (anotherday == false) {
                     cout << "Выберите один из этих залов, в которых можно будет просмотреть фильм сегодня: ";
                     for (int n : listHallsWithCurrentFilm)
                         cout << n << ' ';
@@ -278,11 +290,53 @@ int main() {
                     }
                     else anotherday = true;
                 }
-                else anotherday = true;
+            }
+            if (anotherday == true && day==1) {
+                cout << "Вывод выбранного фильма на следующую неделю\n";
+                Time_t temp_time;
+                temp_time = CurrentTime;
+                for (unsigned d{day+1}; d != 8; d++) {
+                    unsigned c = 0;
+                    temp_time.addTime(0, 0, 0, 1, 0, 0);
+                    for (unsigned i{}; i != hallsValue; ++i) {
+                        for (unsigned j{}; j != 8; ++j) {
+                            if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
+                                c += 1;
+                            }
+                        }
+                    }
+                    if (c != 0) {
+                        cout << temp_time.getDay() << " число: ";
+                        for (unsigned i{}; i != hallsValue; ++i) {
+                            for (unsigned j{}; j != 8; ++j) {
+                                if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
+                                    hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " ";
+                                }
+                            }
+                        }
+                        cout << endl;
+                    }
+                }
+                unsigned curr_hall;
+                cout << "Выберите день: ";
+                cin >> choose_day;
+                
+                temp_time = CurrentTime;
+                day = day + (temp_time - CurrentTime).getMilisec()/1000/60/60/24;
+                cout << day;
+                for (unsigned i{}; i != hallsValue; ++i) {
+                    for (unsigned j{}; j != 8; ++j) {
+                        if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart().getDay()==choose_day) {
+                            curr_hall = i;
+                        }
+                    }
+                }
+                cout << "Рассадка на выбранный день\n";
+                hallsList[curr_hall].PrintMatrix();
+                
+                
             }
             else {
-                //Вывод фильма на ближайшие 7 дней
-                //    Выберите день
             }
         } while (anotherday == true && complete == false);
 
