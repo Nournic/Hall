@@ -7,13 +7,54 @@
 #include <limits>
 #include <set>
 #include <cstdlib>
+#include <tuple>
 
 using namespace std;
 
 const string hallNames[5] = { "1", "2", "3", "4", "5" };
 const string filmNames[10] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 const unsigned filmscount = 10;
+void fillSeatsByVariant(char** arr, const size_t row, const size_t column, const unsigned humans, Hall currHall) {
+    vector<tuple<unsigned, unsigned, unsigned>> indexes;
+    for (size_t i{}; i != row; ++i) {
+        int fs = -1, ls = -1, slots{};
+        for (size_t j{}; j != column; ++j) {
+            if (arr[i][j] == '0') {
+                slots++;
+                if (fs == -1) fs = j;
+            }
+            if (arr[i][j] == '*' || j + 1 == column) {
+                if (slots >= humans) {
+                    ls = j - (1 * arr[i][j] == '*');
+                    indexes.push_back(make_tuple(i, fs, ls));
+                }
+                fs = ls = -1; slots = 0;
+            }
+        }
+    }
+    if (indexes.size() != 0)
+        for (size_t i{}; i != indexes.size(); ++i) {
+            cout << "Вариант рассадки " << i + 1 << "-> "
+                << "Ряд: " << get<0>(indexes[i]) + 1 << " "
+                << "Места: " << get<1>(indexes[i]) + 1 << "-"
+                << get<2>(indexes[i]) + 1 << '\n';
+        }
+    size_t variant;
+    cout << "Выберете вариант рассадки: "; cin >> variant;
+    currHall.SetSeats(get<1>(indexes[variant]), get<2>(indexes[variant]), get<0>(indexes[variant]));
+}
 
+void fillSeatsByUser(unsigned humans, Hall currHall) {
+    unsigned seat = 1;
+    unsigned currRow, currCol;
+    while (humans--)
+    {
+        cout << "Выберете место для зрителя " << seat << " (r c): ";
+        cin >> currRow >> currCol;
+        currHall.SetSeat(currRow, currCol);
+        seat++;
+    }
+}
 string typeSelect(char);
 void cinemaHall(unsigned, Hall*); // функция задает размеры залов.
 int TicketCost(Time_t, Hall, int, int);
@@ -254,9 +295,16 @@ int main() {
                                 //output всех вариантов рассадки
                                 cout << "Хотите выбрать один из предложенных вариантов рассадки? (Y/N): ";
                                 cin >> choose_choosen;
-                                if (choose_choosen == 'Y') {
-                                    //выбор варианта рассадки
-                                }
+                                //if (choose_choosen == 'Y') {
+                                //    //выбор варианта рассадки
+                                //}
+                                //if (choose_choosen == 'Y') {
+                                //    fillSeatsByVariant(currHall.getMatrix(), currHall.getRows(), currHall.getCollumns(), count_bilets, currHall);
+                                //}
+                                //else {
+                                //    fillSeatsByUser(count_bilets, hallsList[currHallNi]);
+                                //}
+                                //hallsList[currHallNumber-1].PrintMatrix();
                             }
 
 

@@ -217,6 +217,14 @@ public:
             }
         }
     }
+    void SetSeats(size_t fs, size_t ls, size_t row) { // заполнение мест
+        for (size_t i = fs; i <= ls; ++i) {
+            matrix[row][i] = '*';
+        }
+    }
+    void SetSeat(size_t i, size_t j) { // изменить статус места 
+        matrix[i][j] = '*';
+    }
 };
 
 
