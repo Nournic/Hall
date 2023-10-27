@@ -154,7 +154,7 @@ public:
 
     void SetMatrix(unsigned h_line, unsigned h_seat) { // задание матрицы мест 
         line = h_line;
-        seat = h_line;
+        seat = h_seat;
         matrix = new char* [line] {};
         films = new Film * [7] {};
         for (size_t i{}; i != line; ++i) {

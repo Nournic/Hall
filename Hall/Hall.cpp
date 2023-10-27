@@ -339,7 +339,8 @@ int main() {
                     else anotherday = true;
                 }
             }
-            if (anotherday == true && day==1) {
+            if (anotherday == true && day==1 || choosefilmtoday=='N') {
+                
                 cout << "Вывод выбранного фильма на следующую неделю\n";
                 Time_t temp_time;
                 temp_time = CurrentTime;
@@ -354,13 +355,16 @@ int main() {
                         }
                     }
                     if (c != 0) {
+                        bool abc = false;;
                         cout << temp_time.getDay() << " число: ";
                         for (unsigned i{}; i != hallsValue; ++i) {
                             for (unsigned j{}; j != 8; ++j) {
                                 if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
-                                    hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " ";
+                                    if (abc == false) { hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " "; abc = true; }
+                                    
                                 }
                             }
+                            abc = false;
                         }
                         cout << endl;
                     }
