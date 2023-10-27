@@ -107,6 +107,7 @@ int main() {
 
     do {
         again = false;
+        anotherday = false;
         do {
             choosefilmtoday = 'N';
             if (anotherday == false) {
@@ -170,7 +171,7 @@ int main() {
                 for (unsigned i{}; i != hallsValue; ++i) {
                     for (unsigned j{}; j != 8; ++j) {
                         if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
-                            listHallsWithCurrentFilm.insert(i);
+                            listHallsWithCurrentFilm.insert(i+1);
                         }
                     }
                 }
@@ -182,12 +183,12 @@ int main() {
                     
                 }
                 if (continue_inspection == 1) {
-                    anotherday = true; again = true;
+                    again = true;
                 }
                 if (again == false) {
                     cout << "Выберите один из этих залов, в которых можно будет просмотреть фильм сегодня: ";
                     for (int n : listHallsWithCurrentFilm)
-                        cout << n+1 << ' ';
+                        cout << n << ' ';
                     cout << endl;
                     unsigned currHallNumber{ 0 };
                     cin >> currHallNumber;
@@ -277,6 +278,7 @@ int main() {
                     }
                     else anotherday = true;
                 }
+                else anotherday = true;
             }
             else {
                 //Вывод фильма на ближайшие 7 дней
