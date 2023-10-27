@@ -61,7 +61,7 @@ int main() {
         cinemaHall(i + 1, hallsList); // задаем параметры количества мест и рядов для каждого объекта в массиве, собств. матрицы.
     }
     cout << "Структура кинозалов настроена. Введённые данные:" << endl;
-    for (size_t i{}; i != hallsValue; i++) {
+    for (unsigned i{}; i != hallsValue; i++) {
         hallsList[i].PrintInfo(); // метод вывода информации, чтобы увидеть результат.
     }
     system("pause");
