@@ -134,6 +134,7 @@ int main() {
     tm* now = localtime(&ttime);
     CurrentTime.setTime(now->tm_sec, now->tm_min, now->tm_hour, now->tm_mday, now->tm_mon, now->tm_year);
     
+    // заполнение залов фильмами и рандомная рассадка людей
     for (size_t i{}; i != hallsValue; i++) {
         hallsList[i].randomFillSeats(); // рандомно сажаем людей :)
 
@@ -164,22 +165,14 @@ int main() {
         }
     };
 
+    // начинается сущий кошмар
     do {
-        again = false;
-        anotherday = false;
+        again = anotherday = false;
         do {
             if (anotherday == false) {
-                //Вывод фильмов на сегодня, с учётом нынешнего времени
-                /*for (size_t i{}; i != 8; ++i) {
-                    if (hallsList[currHallNumber].getFilms(1)[i].getName() != "" && hallsList[currHallNumber].getFilms(1)[i].getTimeStart() > CurrentTime) {
-                        cout << "Name: " << hallsList[currHallNumber].getFilms(1)[i].getName() << " Start time: "; hallsList[currHallNumber].getFilms(1)[i].getTimeStart().printTimeWithoutSeconds();
-                        cout << endl;
-                    }
-                }*/
                 cout << "\nСписок фильмов\n";
                 for (size_t i{}; i != 10; ++i) {
-                    cout << i + 1 << ") Name: " << filmNames[i];
-                    cout << endl;
+                    cout << i + 1 << ") Name: " << filmNames[i] << '\n';
                 }
                 cout << "Хотите посмотреть информацию о каком-либо фильме? (Y/N): ";
                 otvet = 'N';
