@@ -81,6 +81,7 @@ int main() {
     unsigned number_film;
     set<unsigned> listHallsWithCurrentFilm;
     unsigned choose_day;
+    unsigned count_bilets;
 
 
     //Раздача случайно длительности фильмам из массива с именами фильмов
@@ -164,13 +165,6 @@ int main() {
         anotherday = false;
         do {
             if (anotherday == false) {
-                //Вывод фильмов на сегодня, с учётом нынешнего времени
-                /*for (size_t i{}; i != 8; ++i) {
-                    if (hallsList[currHallNumber].getFilms(1)[i].getName() != "" && hallsList[currHallNumber].getFilms(1)[i].getTimeStart() > CurrentTime) {
-                        cout << "Name: " << hallsList[currHallNumber].getFilms(1)[i].getName() << " Start time: "; hallsList[currHallNumber].getFilms(1)[i].getTimeStart().printTimeWithoutSeconds();
-                        cout << endl;
-                    }
-                }*/
                 cout << "\nСписок фильмов\n";
                 for (size_t i{}; i != 10; ++i) {
                     cout << i + 1 << ") Name: " << filmNames[i];
@@ -273,7 +267,7 @@ int main() {
 
                     if (UserChooseTime == 'Y') {
                         hallsList[currHallNumber].PrintMatrix();
-                        unsigned count_bilets;
+                        count_bilets=0;
                         cout << "Сколько билетов купить: ";
                         cin >> count_bilets;
                         char choose_choosen{ 'N' };
@@ -382,7 +376,11 @@ int main() {
                 }
                 cout << "Рассадка на выбранный день\n";
                 hallsList[curr_hall].PrintMatrix();
-                
+                cout << "\nВведите кол-во билетов: ";
+                cin >> count_bilets;
+
+                //выбор вариантов рассадки
+                //if(user_choose_variant==true) complete = true;
                 
             }
             else {
@@ -391,7 +389,7 @@ int main() {
 
         //Оплата
         //userHall.addProfit(1/* счёт оплаты*/);
-        if (/*Конец смена == */true) {
+        if (complete==true) {
             again = false;
         }
         else {
