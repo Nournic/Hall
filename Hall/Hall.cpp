@@ -184,14 +184,18 @@ int main() {
                     cin >> number_film;
                     bool exit{ false };
                     while (exit == false) {
+                        bool acd=false;
                         cout << "Name: " << filmNames[number_film - 1] << " Залы: ";
                         for (size_t i{}; i != hallsValue; ++i) {
                             for (size_t j{}; j != 8; ++j) {
                                 if (hallsList[i].getFilms(day)[j].getName() == filmNames[number_film - 1]) {
-                                    cout << i + 1 << " ";
-                                    break;
+                                    if (acd == false) {
+                                        cout << i + 1 << " ";
+                                        acd = true;
+                                    }
                                 }
                             }
+                            acd = false;
                         }
                         cout << endl;
                         cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1";
