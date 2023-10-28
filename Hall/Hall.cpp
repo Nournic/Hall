@@ -19,7 +19,7 @@ void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
     size_t column = currHall.getCollumns();
     for (unsigned i{}; i != row; ++i) {
         int fs = -1, ls = -1;
-        unsigned slots;
+		unsigned slots{};
         for (unsigned j{}; j != column; ++j) {
             if (arr[i][j] == '0') {
                 slots++;
@@ -48,17 +48,29 @@ void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
  
 }
 
+bool checkSeatStatus(unsigned currRow, unsigned currcol, Hall currHall) {
+	if (currHall.GetSeatStatus(currRow, currcol) == '*') {
+		cout << "Данное место занято, выберете другое место" << '\n';
+		return false;
+	}
+	return true;
+}
+
 void fillSeatsByUser(unsigned humans, Hall currHall) {
 	unsigned seat = 1;
 	unsigned currRow, currCol;
 	while (humans--)
 	{
-		cout << "Выберете место для зрителя " << seat << " (r c): ";
-		cin >> currRow >> currCol;
-		currHall.SetSeat(currRow, currCol);
+		do
+		{
+			cout << "Выберете место для зрителя " << seat << " (r c): ";
+			cin >> currRow >> currCol;
+		} while (!checkSeatStatus(currRow-1, currCol-1, currHall));
+		currHall.SetSeat(currRow-1, currCol-1);
 		seat++;
 	}
 }
+
 string typeSelect(char);
 void cinemaHall(unsigned, Hall*); // функция задает размеры залов.
 int TicketCost(Time_t, Hall, unsigned, unsigned);
@@ -273,37 +285,21 @@ int main() {
 						cin >> count_bilets;
 						char choose_choosen{ 'N' };
 						if (UserChooseTime == 'Y') {
+							cout << "Рассадка на выбранный день\n";
 							hallsList[currHallNumber].PrintMatrix();
 							unsigned count_bilets;
-							cout << "Сколько билетов купить: ";
-							cin >> count_bilets;
-							char choose_choosen{ 'N' };
-							do {
-								char showVariants;
-								bool choose_hand = false;
-								cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
-								cin >> showVariants;
-								if (showVariants == 'Y') { // Вывод вариантов рассадки
-									showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
-								}
-								// Ручной выбор мест
-								cout << "Выберите место для каждого зрителя: " << '\n';
-								fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
-								hallsList[currHallNumber].PrintMatrix();
+							cout << "Сколько билетов купить: "; cin >> count_bilets;
+							char showVariants;
+							bool choose_hand = false;
+							cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+							if (showVariants == 'Y') { // Вывод вариантов рассадки
+								showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
+							}
+							// Ручной выбор мест
+							fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
+							hallsList[currHallNumber].PrintMatrix();
 
-								char seats_choosen_right = 'N';
-								cout << "Места выбраны верно?";
-								cin >> seats_choosen_right;
-
-								if (seats_choosen_right == 'Y') {
-
-									//Формирование счета к оплате
-									complete = true;
-								}
-								else if (choose_hand == true) {
-									// __
-								}
-							} while (choose_choosen == 'Y');
+							complete = true;
 						}
 						else if (choosefilmtoday == 'N') {
 							//Выбор фильма на другой день
@@ -369,9 +365,19 @@ int main() {
 				if (curr_hall != -1) {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
-
-
-
+					unsigned count_bilets;
+					cout << "Сколько билетов купить: "; cin >> count_bilets;
+					char showVariants;
+					bool choose_hand = false;
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+					if (showVariants == 'Y') { // Вывод вариантов рассадки
+						showSeatsVariants(hallsList[curr_hall].getMatrix(), count_bilets, hallsList[curr_hall]);
+					}
+					// Ручной выбор мест
+					fillSeatsByUser(count_bilets, hallsList[curr_hall]);
+					hallsList[curr_hall].PrintMatrix();
+						
+					complete = true;
 				}
 				else {
 					cout << day;
