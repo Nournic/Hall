@@ -64,6 +64,10 @@ public:
         return milisec;
     }
 
+    void setMilisec(unsigned long long total_time) {
+        milisec = total_time;
+    }
+
 
     bool operator==(const Time_t& rhs) const
     {
@@ -128,34 +132,44 @@ public:
     }
 
     Time_t operator-(const Time_t& rhs) const {
-        int secs = sec;
-        int mins = min;
-        int hours = hour;
-        int days = day;
-        int months = month;
-        int years = year;
-        if (secs - rhs.sec < 0) {
-            secs = sec + 60 - rhs.sec;
+        int secs = sec-rhs.sec;
+        int mins = min-rhs.min;
+        int hours = hour-rhs.hour;
+        int days = day-rhs.day;
+        int months = month-rhs.month;
+        int years = year-rhs.year;
+        if (secs < 0) {
+            secs = secs + 60;
             mins -= 1;
         }
-        if (mins - rhs.min < 0) {
-            mins = min + 60 - rhs.min;
+        if (mins< 0) {
+            mins = mins + 60;
             hours -= 1;
         }
-        if (hours - rhs.hour < 0) {
-            hours = hour + 24 - rhs.hour;
+        if (hours< 0) {
+            hours = hours + 24;
             days -= 1;
         }
-        if (days - rhs.day < 1) {
-            days = day + 30 - rhs.day;
+        if (days < 1 && (months == 3 || months == 5 || months == 8 || months == 10)) {
+            days = days + 30;
             months -= 1;
         }
-        if (months - rhs.month < 1) {
-            months = month + 12 - rhs.month;
+        else if (days < 1 && (months == 0 || months == 2 || months == 4 || months == 6 || months == 7 || months == 9 || months == 11)) {
+            days = days + 31;
+            months -= 1;
+        }
+        else if (days < 1 && months == 1) {
+            days = days+28;
+            months -= 1;
+        }
+        if (months< 1) {
+            months = month + 12;
             years -= 1;
         }
+        unsigned long long total_time = 1000 * (secs + mins * 60 + hours * 3600 + days * 24 * 3600 + months * 720 * 3600 + years * 12 * 720 * 3600);
         Time_t newData;
         newData.setTime(secs, mins, hours, days, months, years);
+        newData.setMilisec(total_time);
         return newData;
     }
     void addTime(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 0, unsigned months = 0, unsigned years = 0) {

@@ -162,7 +162,8 @@ int main() {
 				}
 			}
 			day_end.addTime(0, 0, 0, 1, 0, 0); // переход на следующих день
-			start_day.setTime(0, 0, 8, start_day.getDay() + 1, start_day.getMonth(), start_day.getYear());
+			start_day.setTime(0, 0, 8, start_day.getDay(), start_day.getMonth(), start_day.getYear());
+			start_day.addTime(0, 0, 0, 1, 0, 0);
 		}
 	};
 
@@ -183,7 +184,7 @@ int main() {
 						cout << "Name: " << filmNames[filmNumber - 1] << " Залы: ";
 						for (size_t i{}; i != hallsValue; ++i) {
 							for (size_t j{}; j != 8; ++j) {
-								if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1]) {
+								if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
 									cout << i + 1 << " ";
 									break;
 								}
@@ -208,7 +209,6 @@ int main() {
 						if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
 							listHallsWithCurrentFilm.insert(i + 1);
 						}
-						else CurrentTime.printTimeWithoutSeconds();
 					}
 				}
 
@@ -241,8 +241,8 @@ int main() {
                         do {
                             for (size_t i{}; i != 8; ++i) {
                                 Film temp_film;
-                                temp_film = hallsList[currHallNumber].getFilms(1)[i];
-                                if (filmNames[choose_number_film + 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime) {
+                                temp_film = hallsList[currHallNumber].getFilms(day)[i];
+                                if (filmNames[choose_number_film - 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime) {
                                     cout << "Время начала: "; hallsList[currHallNumber].getFilms(1)[i].getTimeStart().printTimeWithoutSeconds();
                                     cout << endl;
                                 }
@@ -355,6 +355,7 @@ int main() {
                 if (temp_time.getDay() > 30)day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
                 else day = day + (temp_time.getDay() - CurrentTime.getDay());
                 if (choose_day > 31) choose_day -= 31;
+
                 for (unsigned i{}; i != hallsValue; ++i) {
                     for (unsigned j{}; j != 8; ++j) {
                         if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1]) {
@@ -365,6 +366,9 @@ int main() {
 				if (curr_hall != -1) {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
+
+
+
 				}
 				else {
 					cout << "Данный фильм ни разу не покажут на этой неделе, выберете другой фильм";
