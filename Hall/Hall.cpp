@@ -172,53 +172,58 @@ int main() {
 		again = anotherday = false; // 
 		do {
 			if (anotherday == false) {
-				cout << "\nСписок фильмов\n";
-				for (size_t i{}; i != 10; ++i) {
-					cout << i + 1 << ") Name: " << filmNames[i] << '\n';
-				}
-				cout << "Хотите посмотреть информацию о каком-либо фильме? (Y/N): "; cin >> otvet;
-				if (otvet == 'Y') {
-					cout << "Введите номер фильма: "; cin >> filmNumber;
-					bool exit = false;
-					while (exit == false) {
-						cout << "Name: " << filmNames[filmNumber - 1] << " Залы: ";
-						for (size_t i{}; i != hallsValue; ++i) {
-							for (size_t j{}; j != 8; ++j) {
-								if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
-									cout << i + 1 << " ";
-									break;
+				do {
+					anotherfilm = false;
+					cout << "\nСписок фильмов\n";
+					for (size_t i{}; i != 10; ++i) {
+						cout << i + 1 << ") Название: " << filmNames[i] << '\n';
+					}
+					cout << "Хотите посмотреть информацию о каком-либо фильме? (Y/N): "; cin >> otvet;
+					if (otvet == 'Y') {
+						cout << "Введите номер фильма: "; cin >> filmNumber;
+						bool exit = false;
+						while (exit == false) {
+							cout << "Name: " << filmNames[filmNumber - 1] << " Залы: ";
+							for (size_t i{}; i != hallsValue; ++i) {
+								for (size_t j{}; j != 8; ++j) {
+									if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
+										cout << i + 1 << " ";
+										break;
+									}
 								}
 							}
-						}
-						cout << '\n';
-						cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1" << '\n'
-							<< "Для выхода из режима просмотра введите 2" << '\n'; cin >> continue_inspection;
-						if (continue_inspection == 0 && filmNumber > 1) filmNumber -= 1;
-						else if (continue_inspection == 1 && filmNumber < 10) filmNumber += 1;
-						else if (continue_inspection == 2) exit = true;
-					}
-				}
-
-				continue_inspection = -1;
-				choose_number_film = 0;
-				anotherfilm = false;
-
-				cout << "Выберите номер желаемого фильма: "; cin >> choose_number_film;
-				for (unsigned i{}; i != hallsValue; ++i) {
-					for (unsigned j{}; j != 8; ++j) {
-						if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
-							listHallsWithCurrentFilm.insert(i + 1);
+							cout << '\n';
+							cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1" << '\n'
+								<< "Для выхода из режима просмотра введите 2" << '\n'; cin >> continue_inspection;
+							if (continue_inspection == 0 && filmNumber > 1) filmNumber -= 1;
+							else if (continue_inspection == 1 && filmNumber < 10) filmNumber += 1;
+							else if (continue_inspection == 2) exit = true;
 						}
 					}
-				}
 
-				if (listHallsWithCurrentFilm.empty()) {
-					cout << "К сожалению, данный фильм не показывают сегодня. У вас есть вариант выбрать другой или придти в другой день\n0 - другой фильм\t1 - другой день\n";
-					cin >> continue_inspection;
-				}
-				if (continue_inspection == 1) {
-					anotherday = true;
-				}
+					continue_inspection = -1;
+					choose_number_film = 0;
+					anotherfilm = false;
+
+					cout << "Выберите номер желаемого фильма: "; cin >> choose_number_film;
+					for (unsigned i{}; i != hallsValue; ++i) {
+						for (unsigned j{}; j != 8; ++j) {
+							if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
+								listHallsWithCurrentFilm.insert(i + 1);
+							}
+						}
+					}
+
+					if (listHallsWithCurrentFilm.empty()) {
+						cout << "К сожалению, данный фильм не показывают сегодня. У вас есть вариант выбрать другой или придти в другой день\n0 - другой фильм\t1 - другой день\n";
+						cin >> continue_inspection;
+					}
+					if (continue_inspection == 1) anotherday = true;
+					else if (continue_inspection == 0) anotherfilm = true;
+					else {
+						cout << "Выбран неверный ответ, запущен процесс выбора фильма\n";
+					}
+				} while (anotherfilm == true);
 				if (anotherday == false) {
 					cout << "Выберите один из этих залов, в которых можно будет просмотреть фильм сегодня: ";
 					for (int n : listHallsWithCurrentFilm)
