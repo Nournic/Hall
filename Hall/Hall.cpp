@@ -93,6 +93,7 @@ int main() {
 	for (size_t i{}; i != 10; ++i) {
 		filmDuration[i].setTime(rand() % 60, rand() % 60, 1, 0, 0, 0);
 	}
+	
 
 	cout << "Вид от кассира" << '\n'
 		<< "Введите количество кинозалов -> "; // проверки нет
@@ -134,7 +135,6 @@ int main() {
 	time_t ttime = time(0);
 	tm* now = localtime(&ttime);
 	CurrentTime.setTime(now->tm_sec, now->tm_min, now->tm_hour, now->tm_mday, now->tm_mon, now->tm_year);
-
 	// заполнение залов фильмами и рандомная рассадка людей
 	for (size_t i{}; i != hallsValue; i++) {
 		hallsList[i].randomFillSeats(); // рандомно сажаем людей :)
@@ -143,20 +143,20 @@ int main() {
 		day_end.setTime(0, 0, 23, CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
 
 		// Рандомная раздача фильмов залу на 7 дней
-		for (short day{ 1 }; day != 8; day++) {
+		for (unsigned d{ 1 }; d != 8; d++) {
 			for (short film{}; film != 8; film++) {
 				short random = rand() % 10;
 
 				// Провека, чтобы предыдущий фильм не совпадал со следующим
 				if (film != 0) {
-					while (hallsList[i].getFilms(day)[film - 1].getName() == filmNames[random]) {
+					while (hallsList[i].getFilms(d)[film - 1].getName() == filmNames[random]) {
 						random = rand() % 10;
 					}
 				}
 
 				// Добавление фильма в список фильмов на день
 				if (start_day < (day_end - filmDuration[random])) {
-					hallsList[i].addFilm(filmNames[random], start_day, filmDuration[random], day);
+					hallsList[i].addFilm(filmNames[random], start_day, filmDuration[random], d);
 					start_day = start_day + filmDuration[random];
 					start_day.addTime(0, 30, 0, 0, 0, 0); // Перерыв
 				}
@@ -220,7 +220,7 @@ int main() {
 					}
 					if (continue_inspection == 1) anotherday = true;
 					else if (continue_inspection == 0) anotherfilm = true;
-					else {
+					else if (continue_inspection != -1){
 						cout << "Выбран неверный ответ, запущен процесс выбора фильма\n";
 					}
 				} while (anotherfilm == true);
@@ -228,7 +228,7 @@ int main() {
 					cout << "Выберите один из этих залов, в которых можно будет просмотреть фильм сегодня: ";
 					for (int n : listHallsWithCurrentFilm)
 						cout << n << ' ';
-					cout << endl;
+					cout << '\n';
 					unsigned currHallNumber{ 0 };
 					cin >> currHallNumber;
 					if (currHallNumber > 0) currHallNumber -= 1;
@@ -248,23 +248,21 @@ int main() {
                                 Film temp_film;
                                 temp_film = hallsList[currHallNumber].getFilms(day)[i];
                                 if (filmNames[choose_number_film - 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime) {
-                                    cout << "Время начала: "; hallsList[currHallNumber].getFilms(1)[i].getTimeStart().printTimeWithoutSeconds();
-                                    cout << endl;
+                                    cout << "Время начала: "; hallsList[currHallNumber].getFilms(day)[i].getTimeStart().printTimeWithoutSeconds();
+									cout << '\n'; cout <<" "<< temp_film.getTimeStart().getYear();
                                 }
                             }
                             cout << "Введите время начала фильма: ";
                             cin >> hours >> mins;
                             for (size_t i{}; i != 8; ++i) {
-                                if (hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getMin() == mins) {
+                                if (hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin() == mins) {
                                     Time_t timee;
-                                    timee.setTime(hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getSec(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour(), CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
+                                    timee.setTime(hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getSec(), hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour(), CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
                                     if (timee > CurrentTime) {
-                                        chooseFilm = hallsList[currHallNumber].getFilms(1)[i];
+                                        chooseFilm = hallsList[currHallNumber].getFilms(day)[i];
                                     }
                                 }
                             }
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         } while (chooseFilm.getTimeStart() == temp.getTimeStart());
                     }
 
@@ -315,59 +313,59 @@ int main() {
                     else anotherday = true;
                 }
             }
-            if (anotherday == true && day==1) {
+			if (anotherday == true && day == 1 && complete==false) {
 
-                cout << "Вывод выбранного фильма на следующую неделю\n";
-                Time_t temp_time;
-                temp_time = CurrentTime;
-                for (unsigned d{day+1}; d != 8; d++) {
-                    unsigned c = 0;
-                    temp_time.addTime(0, 0, 0, 1, 0, 0);
-                    for (unsigned i{}; i != hallsValue; ++i) {
-                        for (unsigned j{}; j != 8; ++j) {
-                            if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
-                                c += 1;
-                            }
-                        }
-                    }
-                    if (c != 0) {
-                        bool abc = false;;
-                        cout << temp_time.getDay() << " число: ";
-                        for (unsigned i{}; i != hallsValue; ++i) {
-                            for (unsigned j{}; j != 8; ++j) {
-                                if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
-                                    if (abc == false) { hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " "; abc = true; }
-                                    
-                                }
-                            }
-                            abc = false;
-                        }
-                        cout << endl;
-                    }
-                }
-                int curr_hall=-1;
-                cout << "Выберите день: ";
-                cin >> choose_day;
-                
-                temp_time = CurrentTime;
-                if (choose_day >= 1 && choose_day < 7) choose_day += 31;
-                temp_time.addTime(0, 0, 0, choose_day - CurrentTime.getDay(), 0, 0);
-                if (temp_time.getMonth() > CurrentTime.getMonth()) {
-                    if (temp_time.getMonth() == 4 || temp_time.getMonth() == 6 || temp_time.getMonth() == 9 || temp_time.getMonth() == 11) temp_time.setDay(temp_time.getDay() + 30);
-                    else if (temp_time.getMonth() == 1 || temp_time.getMonth() == 3 || temp_time.getMonth() == 5 || temp_time.getMonth() == 7 || temp_time.getMonth() == 8 || temp_time.getMonth() == 10 || temp_time.getMonth() == 12) temp_time.setDay(temp_time.getDay() + 31);
-                    else if (temp_time.getMonth() == 2) temp_time.setDay(temp_time.getDay() + 28);
-                }
-                if (temp_time.getDay() > 30)day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
-                else day = day + (temp_time.getDay() - CurrentTime.getDay());
-                if (choose_day > 31) choose_day -= 31;
+				cout << "Вывод выбранного фильма на неделю\n";
+				Time_t temp_time;
+				temp_time = CurrentTime;
+				for (unsigned d{ day + 1 }; d != 8; d++) {
+					unsigned c = 0;
+					temp_time.addTime(0, 0, 0, 1, 0, 0);
+					for (unsigned i{}; i != hallsValue; ++i) {
+						for (unsigned j{}; j != 8; ++j) {
+							if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
+								c += 1;
+							}
+						}
+					}
+					if (c != 0) {
+						bool abc = false;;
+						cout << temp_time.getDay() << " число: ";
+						for (unsigned i{}; i != hallsValue; ++i) {
+							for (unsigned j{}; j != 8; ++j) {
+								if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
+									if (abc == false) { hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " "; abc = true; }
 
-                for (unsigned i{}; i != hallsValue; ++i) {
-                    for (unsigned j{}; j != 8; ++j) {
-                        if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1]) {
-                            curr_hall = i;
-                        }
-                    }
-                }
+								}
+							}
+							abc = false;
+						}
+						cout << '\n';
+					}
+				}
+				int curr_hall = -1;
+				cout << "Выберите день: ";
+				cin >> choose_day;
+
+				temp_time = CurrentTime;
+				if (choose_day >= 1 && choose_day < 7) choose_day += 31;
+				temp_time.addTime(0, 0, 0, choose_day - CurrentTime.getDay(), 0, 0);
+				if (temp_time.getMonth() > CurrentTime.getMonth()) {
+					if (temp_time.getMonth() == 4 || temp_time.getMonth() == 6 || temp_time.getMonth() == 9 || temp_time.getMonth() == 11) temp_time.setDay(temp_time.getDay() + 30);
+					else if (temp_time.getMonth() == 1 || temp_time.getMonth() == 3 || temp_time.getMonth() == 5 || temp_time.getMonth() == 7 || temp_time.getMonth() == 8 || temp_time.getMonth() == 10 || temp_time.getMonth() == 12) temp_time.setDay(temp_time.getDay() + 31);
+					else if (temp_time.getMonth() == 2) temp_time.setDay(temp_time.getDay() + 28);
+				}
+				if (temp_time.getDay() > 30) day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
+				else day = day + (temp_time.getDay() - CurrentTime.getDay());
+				if (choose_day > 31) choose_day -= 31;
+
+				for (unsigned i{}; i != hallsValue; ++i) {
+					for (unsigned j{}; j != 8; ++j) {
+						if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1]) {
+							curr_hall = i;
+						}
+					}
+				}
 				if (curr_hall != -1) {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
@@ -376,14 +374,13 @@ int main() {
 
 				}
 				else {
+					cout << day;
 					cout << "Данный фильм ни разу не покажут на этой неделе, выберете другой фильм";
 					anotherfilm = true;
 				}
-                
-                
-            }
-            else {
-            }
+
+
+			}
         } while (anotherday == true && complete == false);
 
 		//Оплата

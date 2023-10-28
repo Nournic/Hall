@@ -1,15 +1,15 @@
 #include <iostream>
 class Time_t {
 private:
-    unsigned long long milisec{ 1000 * (1970 * (12 * 30 * 24 * 60 * 60) + 24 * 60 * 60 + 30 * 24 * 60 * 60) };
+    unsigned long long milisec{0};
     unsigned sec{ 0 };
     unsigned min{ 0 };
     unsigned hour{ 0 };
-    unsigned day{ 1 };
-    unsigned month{ 1 };
-    unsigned year{ 1970 };
+    unsigned day{ 0 };
+    unsigned month{ 0 };
+    unsigned year{ 0 };
 public:
-    void setTime(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 1, unsigned months = 1, unsigned years = 1970) {
+    void setTime(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 0, unsigned months = 0, unsigned years = 0) {
         if (secs >= 60 && secs % 60 == 0) sec = 1;
         else sec = secs;
         if (mins >= 60 && mins % 60 == 0) min = 1;
