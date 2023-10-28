@@ -57,7 +57,7 @@ void fillSeatsByUser(unsigned humans, Hall currHall) {
 }
 string typeSelect(char);
 void cinemaHall(unsigned, Hall*); // функция задает размеры залов.
-int TicketCost(Time_t, Hall, int, int);
+int TicketCost(Time_t, Hall, unsigned, unsigned);
 
 
 int main() {
