@@ -395,7 +395,7 @@ int main() {
 						hallsList[curr_hall].PrintMatrix();
 
 						char seats_choosen_right = 'N';
-						cout << "Места выбраны верно?";
+						cout << "Места выбраны верно?: ";
 						cin >> seats_choosen_right;
 
 						if (seats_choosen_right == 'Y') {
