@@ -61,7 +61,7 @@ void fillSeatsByUser(unsigned humans, Hall currHall) {
 }
 string typeSelect(char);
 void cinemaHall(unsigned, Hall*); // функция задает размеры залов.
-int TicketCost(Time_t, Hall, int, int);
+int TicketCost(Time_t, Hall, unsigned, unsigned);
 
 
 int main() {
@@ -85,6 +85,7 @@ int main() {
     unsigned number_film;
     set<unsigned> listHallsWithCurrentFilm;
     unsigned choose_day;
+    unsigned count_bilets;
 
 
     //Раздача случайно длительности фильмам из массива с именами фильмов
@@ -271,7 +272,7 @@ int main() {
 
                     if (UserChooseTime == 'Y') {
                         hallsList[currHallNumber].PrintMatrix();
-                        unsigned count_bilets;
+                        count_bilets=0;
                         cout << "Сколько билетов купить: ";
                         cin >> count_bilets;
                         char choose_choosen{ 'N' };
@@ -370,7 +371,11 @@ int main() {
                 }
                 cout << "Рассадка на выбранный день\n";
                 hallsList[curr_hall].PrintMatrix();
-                
+                cout << "\nВведите кол-во билетов: ";
+                cin >> count_bilets;
+
+                //выбор вариантов рассадки
+                //if(user_choose_variant==true) complete = true;
                 
             }
             else {
@@ -379,7 +384,7 @@ int main() {
 
         //Оплата
         //userHall.addProfit(1/* счёт оплаты*/);
-        if (/*Конец смена == */true) {
+        if (complete==true) {
             again = false;
         }
         else {
