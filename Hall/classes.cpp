@@ -107,6 +107,18 @@ public:
     void SetName(string h_name) { // Имя кинозала
         name_hall = h_name;
     }
+    
+    void SetMatrix(unsigned h_line, unsigned h_seat) { // задание матрицы мест 
+        line = h_line; seat = h_seat;
+        matrix = new char* [line] {};
+        films = new Film * [7] {};
+        for (size_t i{}; i != line; ++i) {
+            matrix[i] = new char[seat] {'0'};
+        }
+        for (size_t i{}; i != 7; ++i) {
+            films[i] = new Film[8]{};
+        }
+    }
 
     void addProfit(unsigned money) {
         profit += money;
@@ -123,6 +135,7 @@ public:
     unsigned getProfit() {
         return profit;
     }
+
     void addFilm(string name, Time_t start, Time_t duration, unsigned day) {
         Film filmss;
         filmss.setName(name);
@@ -150,20 +163,6 @@ public:
         }
     }
 
-
-
-    void SetMatrix(unsigned h_line, unsigned h_seat) { // задание матрицы мест 
-        line = h_line;
-        seat = h_seat;
-        matrix = new char* [line] {};
-        films = new Film * [7] {};
-        for (size_t i{}; i != line; ++i) {
-            matrix[i] = new char[seat] {'0'};
-        }
-        for (size_t i{}; i != 7; ++i) {
-            films[i] = new Film[8]{};
-        }
-    }
     void deleteMatrix() {
         for (size_t i{}; i != line; ++i) {
             delete[] matrix[i];
@@ -206,7 +205,7 @@ public:
     void PrintInfo() { // вывод информации о кинозале
         cout << left << "Name: " << setw(5) << name_hall << '\t' << "Line: " << setw(3) << line << '\t' <<
             "Seat: " << setw(3) << seat << '\t' << 
-            "Type: " << setw(8) << type;
+            "Type: " << setw(8) << type << '\n';
     }
 
     void randomFillSeats() { // рандомно сажаем людей :)
