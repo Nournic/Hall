@@ -18,9 +18,10 @@ void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
     vector<tuple<unsigned, unsigned, unsigned>> indexes;
     size_t row = currHall.getRows();
     size_t column = currHall.getCollumns();
-    for (size_t i{}; i != row; ++i) {
-        int fs = -1, ls = -1, slots{};
-        for (size_t j{}; j != column; ++j) {
+    for (unsigned i{}; i != row; ++i) {
+        int fs = -1, ls = -1;
+        unsigned slots;
+        for (unsigned j{}; j != column; ++j) {
             if (arr[i][j] == '0') {
                 slots++;
                 if (fs == -1) fs = j;
