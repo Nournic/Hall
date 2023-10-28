@@ -208,6 +208,7 @@ int main() {
 						if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
 							listHallsWithCurrentFilm.insert(i + 1);
 						}
+						else CurrentTime.printTimeWithoutSeconds();
 					}
 				}
 
@@ -339,7 +340,7 @@ int main() {
                         cout << endl;
                     }
                 }
-                unsigned curr_hall;
+                int curr_hall=-1;
                 cout << "Выберите день: ";
                 cin >> choose_day;
                 
@@ -361,8 +362,14 @@ int main() {
                         }
                     }
                 }
-                cout << "Рассадка на выбранный день\n";
-                hallsList[curr_hall].PrintMatrix();
+				if (curr_hall != -1) {
+					cout << "Рассадка на выбранный день\n";
+					hallsList[curr_hall].PrintMatrix();
+				}
+				else {
+					cout << "Данный фильм ни разу не покажут на этой неделе, выберете другой фильм";
+					anotherfilm = true;
+				}
                 
                 
             }
