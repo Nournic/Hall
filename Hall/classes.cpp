@@ -45,6 +45,7 @@ private:
     Time_t start{};
     Time_t end{};
     Time_t duration_film{};
+    string genre{};
 
 public:
     void setStart(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 1, unsigned months = 1, unsigned years = 1970) {
@@ -52,6 +53,12 @@ public:
     }
     void setStart(Time_t startt) {
         start = startt;
+    }
+    void setGenre(string string) {
+        genre = string;
+    }
+    string getGenre() {
+        return genre;
     }
 
     void setEnd(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 1, unsigned months = 1, unsigned years = 1970) {

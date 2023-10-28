@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const string filmNames[10] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+const string filmNames[10] = { "Миссия невыполнима: декабрьская сессия", "ПМИ: борьба с искусственым интеллектом", "Форсаж 11:заезд  до 1 корпуса", "Тайна ПМИ", "Программисты удачи", "Оппенгеймер", "Барби", "Элементарно", "Тролли 3", "Смешарики" };
 const unsigned filmscount = 10;
 void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
     vector<tuple<unsigned, unsigned, unsigned>> indexes;
@@ -183,7 +183,7 @@ int main() {
 						cout << "Введите номер фильма: "; cin >> filmNumber;
 						bool exit = false;
 						while (exit == false) {
-							cout << "Name: " << filmNames[filmNumber - 1] << " Залы: ";
+							cout << "Название: " << filmNames[filmNumber - 1] << " Залы: ";
 							for (size_t i{}; i != hallsValue; ++i) {
 								for (size_t j{}; j != 8; ++j) {
 									if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
