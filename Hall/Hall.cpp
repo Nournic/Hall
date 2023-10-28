@@ -10,8 +10,7 @@
 #include <tuple>
 
 using namespace std;
-//
-const string hallNames[5] = { "1", "2", "3", "4", "5" };
+
 const string filmNames[10] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 const unsigned filmscount = 10;
 void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
@@ -184,8 +183,8 @@ int main() {
                     cin >> number_film;
                     bool exit{ false };
                     while (exit == false) {
-                        bool acd=false;
-                        cout << "Name: " << filmNames[number_film - 1] << " Залы: ";
+                        bool acd = false;
+                        cout << "Название: " << filmNames[number_film - 1] << " Залы: ";
                         for (size_t i{}; i != hallsValue; ++i) {
                             for (size_t j{}; j != 8; ++j) {
                                 if (hallsList[i].getFilms(day)[j].getName() == filmNames[number_film - 1]) {
@@ -247,7 +246,7 @@ int main() {
                     chooseFilm.setStart(23, 23, 23, 23, 23, 23);
                     Film temp;
                     temp.setStart(23, 23, 23, 23, 23, 23);
-                    cout << "You want choose time? (Y/N): ";
+                    cout << "Вы хотите выбрать время? (Y/N): ";
                     cin >> UserChooseTime;
                     if (UserChooseTime == 'Y') {
                         do {
@@ -259,7 +258,7 @@ int main() {
                                     cout << endl;
                                 }
                             }
-                            cout << "Enter film's time: ";
+                            cout << "Введите время начала фильма: ";
                             cin >> hours >> mins;
                             for (size_t i{}; i != 8; ++i) {
                                 if (hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getMin() == mins) {
@@ -317,13 +316,12 @@ int main() {
                         else if (choosefilmtoday == 'N') {
                             //Выбор фильма на другой день
                         }
-
                     }
                     else anotherday = true;
                 }
             }
             if (anotherday == true && day==1) {
-                
+
                 cout << "Вывод выбранного фильма на следующую неделю\n";
                 Time_t temp_time;
                 temp_time = CurrentTime;
