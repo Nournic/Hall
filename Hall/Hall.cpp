@@ -285,34 +285,21 @@ int main() {
 						cin >> count_bilets;
 						char choose_choosen{ 'N' };
 						if (UserChooseTime == 'Y') {
+							cout << "Рассадка на выбранный день\n";
 							hallsList[currHallNumber].PrintMatrix();
 							unsigned count_bilets;
-							cout << "Сколько билетов купить: ";
-							cin >> count_bilets;
-							char choose_choosen{ 'N' };
-							do {
-								char showVariants;
-								bool choose_hand = false;
-								cout << "Хотите увидеть варианты посадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
-								if (showVariants == 'Y') { // Вывод вариантов рассадки
-									showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
-								}
-								// Ручной выбор мест
-								fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
-								hallsList[currHallNumber].PrintMatrix();
+							cout << "Сколько билетов купить: "; cin >> count_bilets;
+							char showVariants;
+							bool choose_hand = false;
+							cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+							if (showVariants == 'Y') { // Вывод вариантов рассадки
+								showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
+							}
+							// Ручной выбор мест
+							fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
+							hallsList[currHallNumber].PrintMatrix();
 
-								char seats_choosen_right = 'N';
-								cout << "Места выбраны верно?: "; cin >> seats_choosen_right;
-
-								if (seats_choosen_right == 'Y') {
-
-									//Формирование счета к оплате
-									complete = true;
-								}
-								else if (choose_hand == true) {
-									// __
-								}
-							} while (choose_choosen == 'Y');
+							complete = true;
 						}
 						else if (choosefilmtoday == 'N') {
 							//Выбор фильма на другой день
@@ -379,36 +366,18 @@ int main() {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
 					unsigned count_bilets;
-					cout << "Сколько билетов купить: ";
-					cin >> count_bilets;
-					char choose_choosen{ 'N' };
-					do {
-						char showVariants;
-						bool choose_hand = false;
-						cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
-						cin >> showVariants;
-						if (showVariants == 'Y') { // Вывод вариантов рассадки
-							showSeatsVariants(hallsList[curr_hall].getMatrix(), count_bilets, hallsList[curr_hall]);
-						}
-						// Ручной выбор мест
-						fillSeatsByUser(count_bilets, hallsList[curr_hall]);
-						hallsList[curr_hall].PrintMatrix();
-
-						char seats_choosen_right = 'N';
-						cout << "Места выбраны верно?: ";
-						cin >> seats_choosen_right;
-
-						if (seats_choosen_right == 'Y') {
-
-							//Формирование счета к оплате
-							complete = true;
-						}
-						else if (choose_hand == true) {
-							// __
-						}
-					} while (choose_choosen == 'Y');
-
-
+					cout << "Сколько билетов купить: "; cin >> count_bilets;
+					char showVariants;
+					bool choose_hand = false;
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+					if (showVariants == 'Y') { // Вывод вариантов рассадки
+						showSeatsVariants(hallsList[curr_hall].getMatrix(), count_bilets, hallsList[curr_hall]);
+					}
+					// Ручной выбор мест
+					fillSeatsByUser(count_bilets, hallsList[curr_hall]);
+					hallsList[curr_hall].PrintMatrix();
+						
+					complete = true;
 				}
 				else {
 					cout << day;
