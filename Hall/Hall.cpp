@@ -360,6 +360,7 @@ int main() {
                 }
                 if (temp_time.getDay() > 30)day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
                 else day = day + (temp_time.getDay() - CurrentTime.getDay());
+                
                 if (choose_day > 31) choose_day -= 31;
                 for (unsigned i{}; i != hallsValue; ++i) {
                     for (unsigned j{}; j != 8; ++j) {
@@ -368,6 +369,7 @@ int main() {
                         }
                     }
                 }
+
                 cout << "Рассадка на выбранный день\n";
                 hallsList[curr_hall].PrintMatrix();
                 
