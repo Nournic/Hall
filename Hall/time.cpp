@@ -165,6 +165,7 @@ public:
         day += days;
         month += months;
         year += years;
+        milisec+= 1000 * (sec + min * 60 + hour * 3600 + day * 24 * 3600 + month * 720 * 3600 + year * 12 * 720 * 3600);
         if (sec >= 60) {
             sec %= 60;
             min += 1;

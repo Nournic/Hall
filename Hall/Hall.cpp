@@ -163,18 +163,7 @@ int main() {
         again = false;
         anotherday = false;
         do {
-            choosefilmtoday = 'N';
             if (anotherday == false) {
-                cout << "Выбрать фильм на сегодня? (Y/N): ";
-
-                while (!(cin >> choosefilmtoday) || cin.peek() != 10 || (toupper(choosefilmtoday) != 'Y' && toupper(choosefilmtoday) != 'N')) {
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "Выбрать фильм на сегодня? (Y/N): ";
-
-                }
-            }
-            if (choosefilmtoday == 'Y' && anotherday == false) {
                 //Вывод фильмов на сегодня, с учётом нынешнего времени
                 /*for (size_t i{}; i != 8; ++i) {
                     if (hallsList[currHallNumber].getFilms(1)[i].getName() != "" && hallsList[currHallNumber].getFilms(1)[i].getTimeStart() > CurrentTime) {
@@ -339,7 +328,7 @@ int main() {
                     else anotherday = true;
                 }
             }
-            if (anotherday == true && day==1 || choosefilmtoday=='N') {
+            if (anotherday == true && day==1) {
                 
                 cout << "Вывод выбранного фильма на следующую неделю\n";
                 Time_t temp_time;
@@ -374,11 +363,19 @@ int main() {
                 cin >> choose_day;
                 
                 temp_time = CurrentTime;
-                day = day + (temp_time - CurrentTime).getMilisec()/1000/60/60/24;
-                cout << day;
+                if (choose_day >= 1 && choose_day < 7) choose_day += 31;
+                temp_time.addTime(0, 0, 0, choose_day - CurrentTime.getDay(), 0, 0);
+                if (temp_time.getMonth() > CurrentTime.getMonth()) {
+                    if (temp_time.getMonth() == 4 || temp_time.getMonth() == 6 || temp_time.getMonth() == 9 || temp_time.getMonth() == 11) temp_time.setDay(temp_time.getDay() + 30);
+                    else if (temp_time.getMonth() == 1 || temp_time.getMonth() == 3 || temp_time.getMonth() == 5 || temp_time.getMonth() == 7 || temp_time.getMonth() == 8 || temp_time.getMonth() == 10 || temp_time.getMonth() == 12) temp_time.setDay(temp_time.getDay() + 31);
+                    else if (temp_time.getMonth() == 2) temp_time.setDay(temp_time.getDay() + 28);
+                }
+                if (temp_time.getDay() > 30)day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
+                else day = day + (temp_time.getDay() - CurrentTime.getDay());
+                if (choose_day > 31) choose_day -= 31;
                 for (unsigned i{}; i != hallsValue; ++i) {
                     for (unsigned j{}; j != 8; ++j) {
-                        if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1] && hallsList[i].getFilms(day)[j].getTimeStart().getDay()==choose_day) {
+                        if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1]) {
                             curr_hall = i;
                         }
                     }
