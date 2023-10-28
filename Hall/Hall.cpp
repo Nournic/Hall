@@ -305,76 +305,70 @@ int main() {
 							//Выбор фильма на другой день
 						}
 
-					}
-					else anotherday = true;
-				}
-			}
-			if (anotherday == true && day == 1) {
-
-				cout << "Вывод выбранного фильма на следующую неделю\n";
-				Time_t temp_time;
-				temp_time = CurrentTime;
-				for (unsigned d{ day + 1 }; d != 8; d++) {
-					unsigned c = 0;
-					temp_time.addTime(0, 0, 0, 1, 0, 0);
-					for (unsigned i{}; i != hallsValue; ++i) {
-						for (unsigned j{}; j != 8; ++j) {
-							if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
-								c += 1;
-							}
-						}
-					}
-					if (c != 0) {
-						bool abc = false;;
-						cout << temp_time.getDay() << " число: ";
-						for (unsigned i{}; i != hallsValue; ++i) {
-							for (unsigned j{}; j != 8; ++j) {
-								if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
-									if (abc == false) { hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " "; abc = true; }
-
-								}
-							}
-							abc = false;
-						}
-						cout << endl;
-					}
-				}
-				unsigned curr_hall;
-				cout << "Выберите день: ";
-				cin >> choose_day;
-
-				temp_time = CurrentTime;
-				if (choose_day >= 1 && choose_day < 7) choose_day += 31;
-				temp_time.addTime(0, 0, 0, choose_day - CurrentTime.getDay(), 0, 0);
-				if (temp_time.getMonth() > CurrentTime.getMonth()) {
-					if (temp_time.getMonth() == 4 || temp_time.getMonth() == 6 || temp_time.getMonth() == 9 || temp_time.getMonth() == 11) temp_time.setDay(temp_time.getDay() + 30);
-					else if (temp_time.getMonth() == 1 || temp_time.getMonth() == 3 || temp_time.getMonth() == 5 || temp_time.getMonth() == 7 || temp_time.getMonth() == 8 || temp_time.getMonth() == 10 || temp_time.getMonth() == 12) temp_time.setDay(temp_time.getDay() + 31);
-					else if (temp_time.getMonth() == 2) temp_time.setDay(temp_time.getDay() + 28);
-				}
-
-				if (temp_time.getDay() > 30)day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
-				else day = day + (temp_time.getDay() - CurrentTime.getDay());
-				if (choose_day > 31) choose_day -= 31;
-				for (unsigned i{}; i != hallsValue; ++i) {
-					for (unsigned j{}; j != 8; ++j) {
-						if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1]) {
-							curr_hall = i;
-						}
-					}
-				}
-
-				cout << "Рассадка на выбранный день" << '\n';
-				hallsList[curr_hall].PrintMatrix();
-				cout << "\nВведите кол-во билетов: ";
-				cin >> count_bilets;
-
-				//выбор вариантов рассадки
-				//if(user_choose_variant==true) complete = true;
-
-			}
-			else {
-			}
-		} while (anotherday == true && complete == false);
+                    }
+                    else anotherday = true;
+                }
+            }
+            if (anotherday == true && day==1) {
+                
+                cout << "Вывод выбранного фильма на следующую неделю\n";
+                Time_t temp_time;
+                temp_time = CurrentTime;
+                for (unsigned d{day+1}; d != 8; d++) {
+                    unsigned c = 0;
+                    temp_time.addTime(0, 0, 0, 1, 0, 0);
+                    for (unsigned i{}; i != hallsValue; ++i) {
+                        for (unsigned j{}; j != 8; ++j) {
+                            if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
+                                c += 1;
+                            }
+                        }
+                    }
+                    if (c != 0) {
+                        bool abc = false;;
+                        cout << temp_time.getDay() << " число: ";
+                        for (unsigned i{}; i != hallsValue; ++i) {
+                            for (unsigned j{}; j != 8; ++j) {
+                                if (hallsList[i].getFilms(d)[j].getName() == filmNames[choose_number_film - 1]) {
+                                    if (abc == false) { hallsList[i].getFilms(d)[j].getTimeStart().printTimeWithoutSeconds(); cout << " "; abc = true; }
+                                    
+                                }
+                            }
+                            abc = false;
+                        }
+                        cout << endl;
+                    }
+                }
+                unsigned curr_hall;
+                cout << "Выберите день: ";
+                cin >> choose_day;
+                
+                temp_time = CurrentTime;
+                if (choose_day >= 1 && choose_day < 7) choose_day += 31;
+                temp_time.addTime(0, 0, 0, choose_day - CurrentTime.getDay(), 0, 0);
+                if (temp_time.getMonth() > CurrentTime.getMonth()) {
+                    if (temp_time.getMonth() == 4 || temp_time.getMonth() == 6 || temp_time.getMonth() == 9 || temp_time.getMonth() == 11) temp_time.setDay(temp_time.getDay() + 30);
+                    else if (temp_time.getMonth() == 1 || temp_time.getMonth() == 3 || temp_time.getMonth() == 5 || temp_time.getMonth() == 7 || temp_time.getMonth() == 8 || temp_time.getMonth() == 10 || temp_time.getMonth() == 12) temp_time.setDay(temp_time.getDay() + 31);
+                    else if (temp_time.getMonth() == 2) temp_time.setDay(temp_time.getDay() + 28);
+                }
+                if (temp_time.getDay() > 30)day = day + (temp_time.getDay() - CurrentTime.getDay() - 1);
+                else day = day + (temp_time.getDay() - CurrentTime.getDay());
+                if (choose_day > 31) choose_day -= 31;
+                for (unsigned i{}; i != hallsValue; ++i) {
+                    for (unsigned j{}; j != 8; ++j) {
+                        if (hallsList[i].getFilms(day)[j].getName() == filmNames[choose_number_film - 1]) {
+                            curr_hall = i;
+                        }
+                    }
+                }
+                cout << "Рассадка на выбранный день\n";
+                hallsList[curr_hall].PrintMatrix();
+                
+                
+            }
+            else {
+            }
+        } while (anotherday == true && complete == false);
 
 		//Оплата
 		//userHall.addProfit(1/* счёт оплаты*/);
