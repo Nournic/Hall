@@ -137,7 +137,7 @@ int main() {
 	// Текущее время
 	time_t ttime = time(0);
 	tm* now = localtime(&ttime);
-	CurrentTime.setTime(now->tm_sec, now->tm_min, now->tm_hour, now->tm_mday, now->tm_mon, now->tm_year);
+	CurrentTime.setTime(now->tm_sec, now->tm_min, now->tm_hour, now->tm_mday, now->tm_mon+1, now->tm_year+1900);
 	// заполнение залов фильмами и рандомная рассадка людей
 	for (size_t i{}; i != hallsValue; i++) {
 		hallsList[i].randomFillSeats(); // рандомно сажаем людей :)
@@ -179,7 +179,7 @@ int main() {
 					anotherfilm = false;
 					cout << "\nСписок фильмов\n";
 					for (size_t i{}; i != 10; ++i) {
-						cout << i + 1 << ") Название: " << filmNames[i] << '\n';
+						cout << i + 1 << ") " << filmNames[i] << '\n';
 					}
 					cout << "Хотите посмотреть информацию о каком-либо фильме? (Y/N): "; cin >> otvet;
 					if (otvet == 'Y') {
@@ -196,12 +196,12 @@ int main() {
 								}
 							}
 							cout << "\nДлительность: ";
-							if (durationsFilms[filmNumber - 1][1]%10 == 1) cout << durationsFilms[filmNumber - 1][1] << " час ";
-							else if (durationsFilms[filmNumber - 1][1]%10 == 0 || (durationsFilms[filmNumber - 1][1] % 10 <=9 && durationsFilms[filmNumber - 1][1] % 10>=5)) cout << durationsFilms[filmNumber - 1][1] << " часов";
-							else if (durationsFilms[filmNumber - 1][1]%10 > 1 && durationsFilms[filmNumber - 1][1] % 10 <=4) cout << durationsFilms[filmNumber - 1][1] << " часа ";
-							if (durationsFilms[filmNumber - 1][0] % 10 == 1) cout << durationsFilms[filmNumber - 1][0] << " минуту";
-							else if (durationsFilms[filmNumber - 1][0] % 10 == 0 || (durationsFilms[filmNumber - 1][0] % 10 <= 9 && durationsFilms[filmNumber - 1][0] % 10 >= 5)) cout << durationsFilms[filmNumber - 1][0] << " минут";
-							else if (durationsFilms[filmNumber - 1][0] % 10 > 1 && durationsFilms[filmNumber - 1][0] % 10 <= 4) cout << durationsFilms[filmNumber - 1][0] << " минуты";
+							cout << durationsFilms[filmNumber - 1][1] << " час";
+							if (durationsFilms[filmNumber - 1][1]%10 == 0 || (durationsFilms[filmNumber - 1][1] % 10 <=9 && durationsFilms[filmNumber - 1][1] % 10>=5)) cout << "ов";
+							else if (durationsFilms[filmNumber - 1][1]%10 > 1 && durationsFilms[filmNumber - 1][1] % 10 <=4) cout << "а";
+							cout <<" " << durationsFilms[filmNumber - 1][0] << " минут";
+							if (durationsFilms[filmNumber - 1][0] % 10 == 1) cout << "а";
+							else if (durationsFilms[filmNumber - 1][0] % 10 > 1 && durationsFilms[filmNumber - 1][0] % 10 <= 4) cout << "ы";
 							cout << "\n\n";
 							cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1" << '\n'
 								<< "Для выхода из режима просмотра введите 2" << '\n'; cin >> continue_inspection;
@@ -214,7 +214,7 @@ int main() {
 					continue_inspection = -1;
 					choose_number_film = 0;
 					anotherfilm = false;
-
+					listHallsWithCurrentFilm.clear();
 					cout << "Выберите номер желаемого фильма: "; cin >> choose_number_film;
 					for (unsigned i{}; i != hallsValue; ++i) {
 						for (unsigned j{}; j != 8; ++j) {
@@ -228,6 +228,7 @@ int main() {
 						cout << "К сожалению, данный фильм не показывают сегодня. У вас есть вариант выбрать другой или придти в другой день\n0 - другой фильм\t1 - другой день\n";
 						cin >> continue_inspection;
 					}
+
 					if (continue_inspection == 1) anotherday = true;
 					else if (continue_inspection == 0) anotherfilm = true;
 					else if (continue_inspection != -1){
@@ -254,20 +255,20 @@ int main() {
                     cin >> UserChooseTime;
                     if (UserChooseTime == 'Y') {
                         do {
+							Film temp_film;
                             for (size_t i{}; i != 8; ++i) {
-                                Film temp_film;
                                 temp_film = hallsList[currHallNumber].getFilms(day)[i];
-                                if (filmNames[choose_number_film - 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime) {
+                                if (filmNames[choose_number_film - 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime ) {
                                     cout << "Время начала: "; hallsList[currHallNumber].getFilms(day)[i].getTimeStart().printTimeWithoutSeconds();
-									cout << '\n'; cout <<" "<< temp_film.getTimeStart().getYear();
+									cout << '\n'; 
                                 }
                             }
                             cout << "Введите время начала фильма: ";
                             cin >> hours >> mins;
                             for (size_t i{}; i != 8; ++i) {
-                                if (hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin() == mins) {
+                                if (hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin() == mins) {
                                     Time_t timee;
-                                    timee.setTime(hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getSec(), hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour(), CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
+                                    timee.setTime(hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getSec(), hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour(), CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
                                     if (timee > CurrentTime) {
                                         chooseFilm = hallsList[currHallNumber].getFilms(day)[i];
                                     }
@@ -276,7 +277,7 @@ int main() {
                         } while (chooseFilm.getTimeStart() == temp.getTimeStart());
                     }
 
-					if (UserChooseTime == 'Y') {
+					
 						hallsList[currHallNumber].PrintMatrix();
 						count_bilets = 0;
 						cout << "Сколько билетов купить: ";
@@ -285,43 +286,25 @@ int main() {
 						if (UserChooseTime == 'Y') {
 							hallsList[currHallNumber].PrintMatrix();
 							unsigned count_bilets;
-							cout << "Сколько билетов купить: ";
-							cin >> count_bilets;
-							char choose_choosen{ 'N' };
-							do {
-								char showVariants;
-								bool choose_hand = false;
-								cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
-								cin >> showVariants;
-								if (showVariants == 'Y') { // Вывод вариантов рассадки
-									showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
-								}
-								// Ручной выбор мест
-								cout << "Выберите место для каждого зрителя: " << '\n';
-								fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
-								hallsList[currHallNumber].PrintMatrix();
-
-								char seats_choosen_right = 'N';
-								cout << "Места выбраны верно?";
-								cin >> seats_choosen_right;
-
-								if (seats_choosen_right == 'Y') {
-
-									//Формирование счета к оплате
-									complete = true;
-								}
-								else if (choose_hand == true) {
-									// __
-								}
-							} while (choose_choosen == 'Y');
+							cout << "Сколько билетов купить: "; cin >> count_bilets;
+							char showVariants;
+							bool choose_hand = false;
+							cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+							if (showVariants == 'Y') { // Вывод вариантов рассадки
+								showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
+							}
+							// Ручной выбор мест
+							fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
+							hallsList[currHallNumber].PrintMatrix();
+							complete = true;
 						}
 						else if (choosefilmtoday == 'N') {
 							//Выбор фильма на другой день
 						}
 
                     }
-                    else anotherday = true;
-                }
+                    
+                
             }
 			if (anotherday == true && day == 1 && complete==false) {
 
@@ -379,9 +362,18 @@ int main() {
 				if (curr_hall != -1) {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
+					cout << "Сколько билетов купить: "; cin >> count_bilets;
+					char showVariants;
+					bool choose_hand = false;
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+					if (showVariants == 'Y') { // Вывод вариантов рассадки
+						showSeatsVariants(hallsList[curr_hall].getMatrix(), count_bilets, hallsList[curr_hall]);
+					}
+					// Ручной выбор мест
+					fillSeatsByUser(count_bilets, hallsList[curr_hall]);
+					hallsList[curr_hall].PrintMatrix();
 
-
-
+					complete = true;
 				}
 				else {
 					cout << day;
@@ -391,7 +383,7 @@ int main() {
 
 
 			}
-        } while (anotherday == true && complete == false);
+        } while (anotherday == true && complete == false || anotherfilm==true);
 
 		//Оплата
 		//userHall.addProfit(1/* счёт оплаты*/);
@@ -405,6 +397,8 @@ int main() {
 	unsigned profit{ 0 };
 	for (size_t i{}; i != hallsValue; ++i) {
 		profit += hallsList[i].getProfit();
+		hallsList[i].deleteMatrix();
+		
 	}
 	cout << "Кинозал получил прибыли: " << profit;
 

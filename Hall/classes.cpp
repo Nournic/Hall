@@ -179,11 +179,12 @@ public:
             delete[] films[i];
         }
         delete[] films;
+        delete[] matrix;
     }
 
-    void SetSeat(size_t fs, size_t ls, size_t row, char gr) { // заполнение мест
+    void SetSeat(size_t fs, size_t ls, size_t row) { // заполнение мест
         for (size_t i = fs; i <= ls; ++i) {
-            matrix[row][i] = gr;
+            matrix[row][i] = '@';
         }
     }
 
@@ -229,7 +230,7 @@ public:
         }
     }
     void SetSeat(size_t i, size_t j) { // изменить статус места 
-        matrix[i][j] = '*';
+        matrix[i][j] = '@';
     }
 };
 

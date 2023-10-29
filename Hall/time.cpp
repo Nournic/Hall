@@ -21,7 +21,7 @@ public:
         if (months >= 13 && months % 13 == 0) month = 1;
         else month = months % 13;
         year = years;
-        milisec = 1000*(sec + min * 60 + hour * 3600 + day * 24 * 3600 + month * 720 * 3600 + year * 12 * 720 * 3600);
+        milisec = sec + min * 60 + hour * 3600 + day * 24 * 3600 + month * 720 * 3600 + year * 12 * 720 * 3600;
     }
 
 
@@ -118,14 +118,23 @@ public:
             hours %= 24;
             days += 1;
         }
-        if (days > 30) {
-            days %= 30;
+        if (days > 30 && (months == 3 || months == 5 || months == 8 || months == 10)) {
+            days -= 30;
+            months += 1;
+        }
+        else if (days > 31 && (months == 1 || months == 3 || months == 5 || months == 7 || months == 8 || months == 10 || months == 12)) {
+            days -= 31;
+            months += 1;
+        }
+        else if (days > 28 && months == 2) {
+            days -= 28;
             months += 1;
         }
         if (months > 12) {
-            months %= 12;
+            months -= 12;
             years += 1;
         }
+        unsigned long long total_time = secs + mins * 60 + hours * 3600 + days * 24 * 3600 + months * 720 * 3600 + years * 12 * 720 * 3600;
         Time_t newData;
         newData.setTime(secs, mins, hours, days, months, years);
         return newData;
@@ -163,10 +172,10 @@ public:
             months -= 1;
         }
         if (months< 1) {
-            months = month + 12;
+            months = months + 12;
             years -= 1;
         }
-        unsigned long long total_time = 1000 * (secs + mins * 60 + hours * 3600 + days * 24 * 3600 + months * 720 * 3600 + years * 12 * 720 * 3600);
+        unsigned long long total_time = secs + mins * 60 + hours * 3600 + days * 24 * 3600 + months * 720 * 3600 + years * 12 * 720 * 3600;
         Time_t newData;
         newData.setTime(secs, mins, hours, days, months, years);
         newData.setMilisec(total_time);
@@ -179,7 +188,7 @@ public:
         day += days;
         month += months;
         year += years;
-        milisec+= 1000 * (sec + min * 60 + hour * 3600 + day * 24 * 3600 + month * 720 * 3600 + year * 12 * 720 * 3600);
+        milisec = sec + min * 60 + hour * 3600 + day * 24 * 3600 + month * 720 * 3600 + year * 12 * 720 * 3600;
         if (sec >= 60) {
             sec %= 60;
             min += 1;
@@ -208,7 +217,7 @@ public:
             month %= 12;
             year += 1;
         }
-
+       
     }
 
 };
