@@ -179,7 +179,7 @@ public:
             delete[] films[i];
         }
         delete[] films;
-        delete[] matrix;
+        
     }
 
     void SetSeat(size_t fs, size_t ls, size_t row) { // заполнение мест
@@ -211,9 +211,9 @@ public:
     }
 
     void PrintInfo() { // вывод информации о кинозале
-        cout << left << "Name: " << setw(5) << name_hall << '\t' << "Line: " << setw(3) << line << '\t' <<
-            "Seat: " << setw(3) << seat << '\t' << 
-            "Type: " << setw(8) << type << '\n';
+        cout << left << "Имя: " << setw(5) << name_hall << '\t' << "Рядов: " << setw(3) << line << '\t' <<
+            "Мест: " << setw(3) << seat << '\t' << 
+            "Тип: " << setw(8) << type << '\n';
     }
 
     void randomFillSeats() { // рандомно сажаем людей :)
@@ -224,38 +224,7 @@ public:
             }
         }
     }
-    void SetSeats(size_t fs, size_t ls, size_t row) { // заполнение мест
-        for (size_t i = fs; i <= ls; ++i) {
-            matrix[row][i].setStatus('*');
-        }
-    }
     void SetSeat(size_t i, size_t j) { // изменить статус места 
         matrix[i][j].setStatus('@');
     }
-};
-
-
-
-class Hall_Money
-{
-private:
-    size_t line{};
-    size_t seat{};
-    unsigned** matrix{};
-    unsigned money{ 0 };
-public:
-
-    void SetMatrix(size_t h_line, size_t h_seat) { // задание матрицы мест 
-        line = h_line;
-        seat = h_line;
-        matrix = new unsigned* [line] {};
-        for (size_t i{}; i != line; ++i) {
-            matrix[i] = new unsigned[seat] {'0'};
-        }
-    }
-
-    void addProfit(unsigned profit) {
-        money += profit;
-    }
-
 };

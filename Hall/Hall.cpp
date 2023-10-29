@@ -3,74 +3,26 @@
 #include "classes.cpp"
 #include <ctime>
 #pragma warning(disable : 4996)
-#include <algorithm>
-#include <limits>
 #include <set>
-#include <cstdlib>
 #include <tuple>
 
 using namespace std;
 
 const string filmNames[10] = { "Миссия невыполнима: декабрьская сессия", "ПМИ: борьба с искусственым интеллектом", "Форсаж 11: заезд  до 1 корпуса", "Тайна ПМИ", "Программисты удачи", "Оппенгеймер", "Барби", "Элементарно", "Тролли 3", "Смешарики снимают кино" };
 const unsigned filmscount = 10;
+//durationFilms - 1 значение минуты, 2 часы
 const unsigned durationsFilms[10][2] = { {43, 2}, {24, 1}, {21, 2}, {45, 1}, {24, 1}, {0, 3}, {54, 1}, {41, 1}, {32, 1}, {51, 0} };
 
-
-void showSeatsVariants(Seat** arr, const unsigned humans, Hall currHall) {
-    vector<tuple<unsigned, unsigned, unsigned>> indexes;
-    size_t row = currHall.getRows();
-    size_t column = currHall.getCollumns();
-    for (unsigned i{}; i != row; ++i) {
-        int fs = -1, ls = -1;
-        unsigned slots;
-        for (unsigned j{}; j != column; ++j) {
-            if (arr[i][j].getStatus() == '0') {
-                slots++;
-                if (fs == -1) fs = j;
-            }
-            if (arr[i][j].getStatus() == '*' || j + 1 == column) {
-                if (slots >= humans) {
-                    ls = j - (1 * arr[i][j].getStatus() == '*');
-                    indexes.push_back(make_tuple(i, fs, ls));
-                }
-                fs = ls = -1; slots = 0;
-            }
-        }
-    }
-    if (indexes.size() != 0) {
-        for (size_t i{}; i != indexes.size(); ++i) {
-            cout << "Вариант рассадки " << i + 1 << "-> "
-                << "Ряд: " << get<0>(indexes[i]) + 1 << " "
-                << "Места: " << get<1>(indexes[i]) + 1 << "-"
-                << get<2>(indexes[i]) + 1 << '\n';
-        }
-    }
-    else {
-        cout << "К сожалению вашу группу невозможно посадить в один ряд, попробуйте ручной выбор мест" << '\n';
-    }
- 
-}
-
-void fillSeatsByUser(unsigned humans, Hall currHall) {
-	unsigned seat = 1;
-	unsigned currRow, currCol;
-	while (humans--)
-	{
-		cout << "Выберете место для зрителя " << seat << " (r c): ";
-		cin >> currRow >> currCol;
-		currHall.SetSeat(currRow, currCol);
-		seat++;
-	}
-}
 string typeSelect(char);
 void cinemaHall(unsigned, Hall*); // функция задает размеры залов.
 int TicketCost(Time_t, Hall, unsigned, unsigned);
+void showSeatsVariants(Seat**, const unsigned, Hall);
+void fillSeatsByUser(unsigned, Hall);
 
 
 int main() {
 	srand(time(NULL));
 	setlocale(LC_ALL, "RU");
-
 
 	size_t hallsValue; //Количество залов
 	Time_t CurrentTime;
@@ -96,7 +48,6 @@ int main() {
 	for (size_t i{}; i != 10; ++i) {
 		filmDuration[i].setTime(0, durationsFilms[i][0], durationsFilms[i][1], 0, 0, 0);
 	}
-	
 
 	cout << "Вид от кассира" << '\n'
 		<< "Введите количество кинозалов -> "; // проверки нет
@@ -187,13 +138,17 @@ int main() {
 						bool exit = false;
 						while (exit == false) {
 							cout << "\nНазвание: " << filmNames[filmNumber - 1] << "\nЗалы: ";
+							bool temp_bool=false;
 							for (size_t i{}; i != hallsValue; ++i) {
 								for (size_t j{}; j != 8; ++j) {
 									if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
-										cout << i + 1 << " ";
-										break;
+										if (temp_bool == false) {
+											cout << i + 1 << " ";
+											temp_bool = true;
+										}
 									}
 								}
+								temp_bool = false;
 							}
 							cout << "\nДлительность: ";
 							cout << durationsFilms[filmNumber - 1][1] << " час";
@@ -277,34 +232,25 @@ int main() {
                         } while (chooseFilm.getTimeStart() == temp.getTimeStart());
                     }
 
-					
-						hallsList[currHallNumber].PrintMatrix();
-						count_bilets = 0;
-						cout << "Сколько билетов купить: ";
-						cin >> count_bilets;
-						char choose_choosen{ 'N' };
-						if (UserChooseTime == 'Y') {
-							hallsList[currHallNumber].PrintMatrix();
-							unsigned count_bilets;
-							cout << "Сколько билетов купить: "; cin >> count_bilets;
-							char showVariants;
-							bool choose_hand = false;
-							cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
-							if (showVariants == 'Y') { // Вывод вариантов рассадки
-								showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
-							}
-							// Ручной выбор мест
-							fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
-							hallsList[currHallNumber].PrintMatrix();
-							Time_t temp_t;
-							temp_t.setTime(0, mins, hours, 0, 0, 0);
-							hallsList[currHallNumber].addProfit(TicketCost(temp_t,hallsList[currHallNumber],0,0));
-							complete = true;
-						}
-						else if (choosefilmtoday == 'N') {
-							//Выбор фильма на другой день
-						}
+					count_bilets = 0;					
+					hallsList[currHallNumber].PrintMatrix();
+					unsigned count_bilets;
+					cout << "Сколько билетов купить: "; cin >> count_bilets;
+					char showVariants;
+					bool choose_hand = false;
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+					if (showVariants == 'Y') { // Вывод вариантов рассадки
+						showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
+					}
+					// Ручной выбор мест
+					fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
+					hallsList[currHallNumber].PrintMatrix();
+					Time_t temp_t;
 
+					temp_t.setTime(0, hallsList[currHallNumber].getFilms(day)[choose_number_film - 1].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(day)[choose_number_film - 1].getTimeStart().getHour(), 0, 0, 0);
+					hallsList[currHallNumber].addProfit(TicketCost(temp_t, hallsList[currHallNumber], 1, 1)*count_bilets);
+					complete = true;
+						
                     }
                     
                 
@@ -386,7 +332,7 @@ int main() {
 
 
 			}
-        } while (anotherday == true && complete == false || anotherfilm==true);
+        } while (anotherday == true && complete == false);
 
 		//Оплата
 		//userHall.addProfit(1/* счёт оплаты*/);
@@ -401,7 +347,6 @@ int main() {
 	for (size_t i{}; i != hallsValue; ++i) {
 		profit += hallsList[i].getProfit();
 		hallsList[i].deleteMatrix();
-		
 	}
 	cout << "Кинозал получил прибыли: " << profit;
 
@@ -470,4 +415,49 @@ int TicketCost(Time_t time, Hall hall, unsigned seat_r, unsigned seat_c) {
 		}
 	}
 	return price;
+}
+void showSeatsVariants(Seat** arr, const unsigned humans, Hall currHall) {
+	vector<tuple<unsigned, unsigned, unsigned>> indexes;
+	size_t row = currHall.getRows();
+	size_t column = currHall.getCollumns();
+	for (unsigned i{}; i != row; ++i) {
+		int fs = -1, ls = -1;
+		unsigned slots{ 0 };
+		for (unsigned j{}; j != column; ++j) {
+			if (arr[i][j].getStatus() == '0') {
+				slots++;
+				if (fs == -1) fs = j;
+			}
+			if (arr[i][j].getStatus() == '*' || j + 1 == column) {
+				if (slots >= humans) {
+					ls = j - (1 * arr[i][j].getStatus() == '*');
+					indexes.push_back(make_tuple(i, fs, ls));
+				}
+				fs = ls = -1; slots = 0;
+			}
+		}
+	}
+	if (indexes.size() != 0) {
+		for (size_t i{}; i != indexes.size(); ++i) {
+			cout << "Вариант рассадки " << i + 1 << "-> "
+				<< "Ряд: " << get<0>(indexes[i]) + 1 << " "
+				<< "Места: " << get<1>(indexes[i]) + 1 << "-"
+				<< get<2>(indexes[i]) + 1 << '\n';
+		}
+	}
+	else {
+		cout << "К сожалению вашу группу невозможно посадить в один ряд, попробуйте ручной выбор мест" << '\n';
+	}
+
+}
+void fillSeatsByUser(unsigned humans, Hall currHall) {
+	unsigned seat = 1;
+	unsigned currRow, currCol;
+	while (humans--)
+	{
+		cout << "Выберете место для зрителя " << seat << " (r c): ";
+		cin >> currRow >> currCol;
+		currHall.SetSeat(currRow - 1, currCol - 1);
+		seat++;
+	}
 }
