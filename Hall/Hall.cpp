@@ -16,7 +16,7 @@ const unsigned filmscount = 10;
 const unsigned durationsFilms[10][2] = { {43, 2}, {24, 1}, {21, 2}, {45, 1}, {24, 1}, {0, 3}, {54, 1}, {41, 1}, {32, 1}, {51, 0} };
 
 
-void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
+void showSeatsVariants(Seat** arr, const unsigned humans, Hall currHall) {
     vector<tuple<unsigned, unsigned, unsigned>> indexes;
     size_t row = currHall.getRows();
     size_t column = currHall.getCollumns();
@@ -24,13 +24,13 @@ void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
         int fs = -1, ls = -1;
         unsigned slots;
         for (unsigned j{}; j != column; ++j) {
-            if (arr[i][j] == '0') {
+            if (arr[i][j].getStatus() == '0') {
                 slots++;
                 if (fs == -1) fs = j;
             }
-            if (arr[i][j] == '*' || j + 1 == column) {
+            if (arr[i][j].getStatus() == '*' || j + 1 == column) {
                 if (slots >= humans) {
-                    ls = j - (1 * arr[i][j] == '*');
+                    ls = j - (1 * arr[i][j].getStatus() == '*');
                     indexes.push_back(make_tuple(i, fs, ls));
                 }
                 fs = ls = -1; slots = 0;

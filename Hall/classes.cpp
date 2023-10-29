@@ -99,7 +99,7 @@ private:
     unsigned line{};
     unsigned seat{};
     string name_hall = "";
-    char** matrix{};
+    Seat** matrix{};
     const size_t size = 7;
     Film** films{};
     unsigned profit{ 0 };
@@ -117,10 +117,10 @@ public:
     
     void SetMatrix(unsigned h_line, unsigned h_seat) { // задание матрицы мест 
         line = h_line; seat = h_seat;
-        matrix = new char* [line] {};
+        matrix = new Seat* [line] {};
         films = new Film * [7] {};
         for (size_t i{}; i != line; ++i) {
-            matrix[i] = new char[seat] {'0'};
+            matrix[i] = new Seat[seat];
         }
         for (size_t i{}; i != 7; ++i) {
             films[i] = new Film[8]{};
@@ -156,7 +156,7 @@ public:
         }
     }
 
-    char** getMatrix() {
+    Seat** getMatrix() {
         return matrix;
     }
 
@@ -184,12 +184,12 @@ public:
 
     void SetSeat(size_t fs, size_t ls, size_t row) { // заполнение мест
         for (size_t i = fs; i <= ls; ++i) {
-            matrix[row][i] = '@';
+            matrix[row][i].setStatus('@');
         }
     }
 
     char GetSeatStatus(size_t i, size_t j) { // получить статус места 
-        return matrix[i][j];
+        return matrix[i][j].getStatus();
     }
 
     size_t GetLine() { // получить число рядов 
@@ -203,7 +203,7 @@ public:
     void PrintMatrix() { // вывод матрицы мест
         for (size_t i{}; i != line; ++i) {
             for (size_t j{}; j != seat; ++j) {
-                cout << matrix[i][j] << " ";
+                cout << matrix[i][j].getStatus() << " ";
             }
             cout << '\n';
         }
@@ -220,17 +220,17 @@ public:
         char elems[2] = { '0', '*' };
         for (size_t i{}; i != line; ++i) {
             for (size_t j{}; j != seat; ++j) {
-                matrix[i][j] = elems[rand() % 2];
+                matrix[i][j].setStatus(elems[rand() % 2]);
             }
         }
     }
     void SetSeats(size_t fs, size_t ls, size_t row) { // заполнение мест
         for (size_t i = fs; i <= ls; ++i) {
-            matrix[row][i] = '*';
+            matrix[row][i].setStatus('*');
         }
     }
     void SetSeat(size_t i, size_t j) { // изменить статус места 
-        matrix[i][j] = '@';
+        matrix[i][j].setStatus('@');
     }
 };
 
