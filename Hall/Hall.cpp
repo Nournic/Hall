@@ -11,8 +11,11 @@
 
 using namespace std;
 
-const string filmNames[10] = { "Миссия невыполнима: декабрьская сессия", "ПМИ: борьба с искусственым интеллектом", "Форсаж 11:заезд  до 1 корпуса", "Тайна ПМИ", "Программисты удачи", "Оппенгеймер", "Барби", "Элементарно", "Тролли 3", "Смешарики" };
+const string filmNames[10] = { "Миссия невыполнима: декабрьская сессия", "ПМИ: борьба с искусственым интеллектом", "Форсаж 11: заезд  до 1 корпуса", "Тайна ПМИ", "Программисты удачи", "Оппенгеймер", "Барби", "Элементарно", "Тролли 3", "Смешарики снимают кино" };
 const unsigned filmscount = 10;
+const unsigned durationsFilms[10][2] = { {43, 2}, {24, 1}, {21, 2}, {45, 1}, {24, 1}, {0, 3}, {54, 1}, {41, 1}, {32, 1}, {51, 0} };
+
+
 void showSeatsVariants(char** arr, const unsigned humans, Hall currHall) {
     vector<tuple<unsigned, unsigned, unsigned>> indexes;
     size_t row = currHall.getRows();
@@ -91,7 +94,7 @@ int main() {
 	//Раздача случайно длительности фильмам из массива с именами фильмов
 	Time_t filmDuration[10];
 	for (size_t i{}; i != 10; ++i) {
-		filmDuration[i].setTime(rand() % 60, rand() % 60, 1, 0, 0, 0);
+		filmDuration[i].setTime(0, durationsFilms[i][0], durationsFilms[i][1], 0, 0, 0);
 	}
 	
 
@@ -183,7 +186,7 @@ int main() {
 						cout << "Введите номер фильма: "; cin >> filmNumber;
 						bool exit = false;
 						while (exit == false) {
-							cout << "Название: " << filmNames[filmNumber - 1] << " Залы: ";
+							cout << "\nНазвание: " << filmNames[filmNumber - 1] << "\nЗалы: ";
 							for (size_t i{}; i != hallsValue; ++i) {
 								for (size_t j{}; j != 8; ++j) {
 									if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
@@ -192,7 +195,14 @@ int main() {
 									}
 								}
 							}
-							cout << '\n';
+							cout << "\nДлительность: ";
+							if (durationsFilms[filmNumber - 1][1]%10 == 1) cout << durationsFilms[filmNumber - 1][1] << " час ";
+							else if (durationsFilms[filmNumber - 1][1]%10 == 0 || (durationsFilms[filmNumber - 1][1] % 10 <=9 && durationsFilms[filmNumber - 1][1] % 10>=5)) cout << durationsFilms[filmNumber - 1][1] << " часов";
+							else if (durationsFilms[filmNumber - 1][1]%10 > 1 && durationsFilms[filmNumber - 1][1] % 10 <=4) cout << durationsFilms[filmNumber - 1][1] << " часа ";
+							if (durationsFilms[filmNumber - 1][0] % 10 == 1) cout << durationsFilms[filmNumber - 1][0] << " минуту";
+							else if (durationsFilms[filmNumber - 1][0] % 10 == 0 || (durationsFilms[filmNumber - 1][0] % 10 <= 9 && durationsFilms[filmNumber - 1][0] % 10 >= 5)) cout << durationsFilms[filmNumber - 1][0] << " минут";
+							else if (durationsFilms[filmNumber - 1][0] % 10 > 1 && durationsFilms[filmNumber - 1][0] % 10 <= 4) cout << durationsFilms[filmNumber - 1][0] << " минуты";
+							cout << "\n\n";
 							cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1" << '\n'
 								<< "Для выхода из режима просмотра введите 2" << '\n'; cin >> continue_inspection;
 							if (continue_inspection == 0 && filmNumber > 1) filmNumber -= 1;
