@@ -296,6 +296,9 @@ int main() {
 							// Ручной выбор мест
 							fillSeatsByUser(count_bilets, hallsList[currHallNumber]);
 							hallsList[currHallNumber].PrintMatrix();
+							Time_t temp_t;
+							temp_t.setTime(0, mins, hours, 0, 0, 0);
+							hallsList[currHallNumber].addProfit(TicketCost(temp_t,hallsList[currHallNumber],0,0));
 							complete = true;
 						}
 						else if (choosefilmtoday == 'N') {
@@ -372,7 +375,7 @@ int main() {
 					// Ручной выбор мест
 					fillSeatsByUser(count_bilets, hallsList[curr_hall]);
 					hallsList[curr_hall].PrintMatrix();
-
+					hallsList[curr_hall].addProfit(250*count_bilets);
 					complete = true;
 				}
 				else {
@@ -440,15 +443,15 @@ int TicketCost(Time_t time, Hall hall, unsigned seat_r, unsigned seat_c) {
 	int sessionTime_h = time.getHour();
 
 	int price = 0;
-	if (sessionTime_h == 13)
+	if (sessionTime_h == 8)
 	{
 		price += 250;
 	}
-	if (sessionTime_h > 13 && sessionTime_h <= 18)
+	if (sessionTime_h > 9 && sessionTime_h <= 15)
 	{
 		price += 350;
 	}
-	if ((sessionTime_h > 18 && sessionTime_h < 25))
+	if ((sessionTime_h > 15 && sessionTime_h < 24))
 	{
 		price += 500;
 	}
