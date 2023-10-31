@@ -170,7 +170,7 @@ public:
         }
     }
 
-    void deleteMatrix() {
+    ~Hall() {
         for (size_t i{}; i != line; ++i) {
             delete[] matrix[i];
         }
