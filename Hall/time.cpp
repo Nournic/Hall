@@ -14,7 +14,7 @@ public:
         else sec = secs;
         if (mins >= 60 && mins % 60 == 0) min = 1;
         else min = mins;
-        if (hours >= 24 && hours % 24 == 0) hours = 1;
+        if (hours >= 24 && hours % 24 == 0) hour = 1;
         else hour = hours;
         if (days >= 31 && days % 31 == 0) day = 1;
         else day = days % 31;
@@ -178,7 +178,7 @@ public:
         unsigned long long total_time = secs + mins * 60 + hours * 3600 + days * 24 * 3600 + months * 720 * 3600 + years * 12 * 720 * 3600;
         Time_t newData;
         newData.setTime(secs, mins, hours, days, months, years);
-        newData.setMilisec(total_time);
+        
         return newData;
     }
     void addTime(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 0, unsigned months = 0, unsigned years = 0) {

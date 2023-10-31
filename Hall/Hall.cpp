@@ -122,6 +122,7 @@ int main() {
 				if (start_day < (day_end - filmDuration[random])) {
 					hallsList[i].addFilm(filmNames[random], start_day, filmDuration[random], d);
 					start_day = start_day + filmDuration[random] + temp_t_again;
+					
 				}
 			}
 			day_end.addTime(0, 0, 0, 1, 0, 0); // переход на следующих день
@@ -264,7 +265,6 @@ int main() {
                                 }
                             }
                             cout << "Введите время начала фильма (часы и минуты через пробел): ";
-                            cin >> hours >> mins;
 							while (!(cin >> hours) || !(cin >> mins) || cin.peek() != 10 || (toupper(UserChooseTime) != 'N' && toupper(UserChooseTime) != 'Y')) {
 								cin.clear();
 								cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -285,10 +285,20 @@ int main() {
 					count_bilets = 0;					
 					hallsList[currHallNumber].PrintMatrix();
 					unsigned count_bilets;
-					cout << "Сколько билетов купить: "; cin >> count_bilets;
+					cout << "Сколько билетов купить: "; 
+					while (!(cin >> count_bilets) || cin.peek() != 10) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						cout << "Сколько билетов купить: ";
+					}
 					char showVariants;
 					bool choose_hand = false;
-					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; 
+					while (!(cin >> showVariants) || cin.peek() != 10 || (toupper(showVariants)!='Y' && toupper(showVariants)!='N')) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
+					}
 					if (showVariants == 'Y') { // Вывод вариантов рассадки
 						showSeatsVariants(hallsList[currHallNumber].getMatrix(), count_bilets, hallsList[currHallNumber]);
 					}
@@ -337,7 +347,12 @@ int main() {
 				}
 				int curr_hall = -1;
 				cout << "Выберите день: ";
-				cin >> choose_day;
+				
+				while (!(cin >> choose_day) || cin.peek() != 10) {
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "Выберите день: ";
+				}
 
 				temp_time = CurrentTime;
 				if (choose_day >= 1 && choose_day < 7) choose_day += 31;
@@ -361,10 +376,20 @@ int main() {
 				if (curr_hall != -1) {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
-					cout << "Сколько билетов купить: "; cin >> count_bilets;
+					cout << "Сколько билетов купить: "; 
+					while (!(cin >> count_bilets) || cin.peek() != 10) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						cout << "Сколько билетов купить: ";
+					}
 					char showVariants;
 					bool choose_hand = false;
-					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; cin >> showVariants;
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
+					while (!(cin >> showVariants) || cin.peek() != 10 || (toupper(showVariants) != 'Y' && toupper(showVariants) != 'N')) {
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
+					}
 					if (showVariants == 'Y') { // Вывод вариантов рассадки
 						showSeatsVariants(hallsList[curr_hall].getMatrix(), count_bilets, hallsList[curr_hall]);
 					}
