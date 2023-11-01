@@ -78,7 +78,7 @@ int main() {
 		for (unsigned i{}; i != hallsValue; i++) {
 			cout << "Введите название для кинозала " << i + 1 << " зала -> "; cin >> name;
 			hallsList[i].SetName(name); // установка имени зала.
-			cout << "Выберите тип зала ('g' - обычный, 's' - с диванами, 'v' - VIP, 'c' - детский) -> "; 
+			cout << "Выберите тип зала ('g' - обычный, 's' - с диванами, 'v' - VIP, 'c' - детский) -> ";
 			cin >> type; // установка типа зала.
 			hallsList[i].SetType(typeSelect(type));
 			cinemaHall(i + 1, hallsList); // задаем параметры количества мест и рядов для каждого объекта в массиве, собств. матрицы.
@@ -97,7 +97,7 @@ int main() {
 	// Текущее время
 	time_t ttime = time(0);
 	tm* now = localtime(&ttime);
-	CurrentTime.setTime(now->tm_sec, now->tm_min, now->tm_hour, now->tm_mday, now->tm_mon+1, now->tm_year+1900);
+	CurrentTime.setTime(now->tm_sec, now->tm_min, now->tm_hour, now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
 	// заполнение залов фильмами и рандомная рассадка людей
 	Time_t temp_t_again;
 	temp_t_again.setTime(0, 30, 0, 0, 0, 0);
@@ -106,7 +106,7 @@ int main() {
 
 		start_day.setTime(0, 0, 8, CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
 		day_end.setTime(0, 0, 23, CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
-		
+
 		// Рандомная раздача фильмов залу на 7 дней
 		for (unsigned d{ 1 }; d != 8; d++) {
 			for (short film{}; film != 8; film++) {
@@ -123,7 +123,7 @@ int main() {
 				if (start_day < (day_end - filmDuration[random])) {
 					hallsList[i].addFilm(filmNames[random], start_day, filmDuration[random], d);
 					start_day = start_day + filmDuration[random] + temp_t_again;
-					
+
 				}
 			}
 			day_end.addTime(0, 0, 0, 1, 0, 0); // переход на следующих день
@@ -143,7 +143,7 @@ int main() {
 					for (size_t i{}; i != 10; ++i) {
 						cout << i + 1 << ") " << filmNames[i] << '\n';
 					}
-					cout << "Хотите посмотреть информацию о каком-либо фильме? (Y/N): "; 
+					cout << "Хотите посмотреть информацию о каком-либо фильме? (Y/N): ";
 					while (!(cin >> otvet) || cin.peek() != 10 || (toupper(otvet) != 'N' && toupper(otvet) != 'Y')) {
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -159,7 +159,7 @@ int main() {
 						bool exit = false;
 						while (exit == false) {
 							cout << "\nНазвание: " << filmNames[filmNumber - 1] << "\nЗалы: ";
-							bool temp_bool=false;
+							bool temp_bool = false;
 							for (size_t i{}; i != hallsValue; ++i) {
 								for (size_t j{}; j != 8; ++j) {
 									if (hallsList[i].getFilms(day)[j].getName() == filmNames[filmNumber - 1] && hallsList[i].getFilms(day)[j].getTimeStart() > CurrentTime) {
@@ -173,15 +173,15 @@ int main() {
 							}
 							cout << "\nДлительность: ";
 							cout << durationsFilms[filmNumber - 1][1] << " час";
-							if (durationsFilms[filmNumber - 1][1]%10 == 0 || (durationsFilms[filmNumber - 1][1] % 10 <=9 && durationsFilms[filmNumber - 1][1] % 10>=5)) cout << "ов";
-							else if (durationsFilms[filmNumber - 1][1]%10 > 1 && durationsFilms[filmNumber - 1][1] % 10 <=4) cout << "а";
-							cout <<" " << durationsFilms[filmNumber - 1][0] << " минут";
+							if (durationsFilms[filmNumber - 1][1] % 10 == 0 || (durationsFilms[filmNumber - 1][1] % 10 <= 9 && durationsFilms[filmNumber - 1][1] % 10 >= 5)) cout << "ов";
+							else if (durationsFilms[filmNumber - 1][1] % 10 > 1 && durationsFilms[filmNumber - 1][1] % 10 <= 4) cout << "а";
+							cout << " " << durationsFilms[filmNumber - 1][0] << " минут";
 							if (durationsFilms[filmNumber - 1][0] % 10 == 1) cout << "а";
 							else if (durationsFilms[filmNumber - 1][0] % 10 > 1 && durationsFilms[filmNumber - 1][0] % 10 <= 4) cout << "ы";
 							cout << "\n\n";
 							cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1" << '\n'
-								<< "Для выхода из режима просмотра введите 2" << '\n'; 
-							while (!(cin >> continue_inspection) || cin.peek() != 10 || (continue_inspection<0 && continue_inspection>2)) {
+								<< "Для выхода из режима просмотра введите 2" << '\n';
+							while (!(cin >> continue_inspection) || cin.peek() != 10 || (continue_inspection < 0 && continue_inspection>2)) {
 								cin.clear();
 								cin.ignore(numeric_limits<streamsize>::max(), '\n');
 								cout << "Для просмотра предыдущего фильма введите 0, для просмотра следующего фильма введите 1" << '\n'
@@ -222,7 +222,7 @@ int main() {
 
 					if (continue_inspection == 1) anotherday = true;
 					else if (continue_inspection == 0) anotherfilm = true;
-					else if (continue_inspection != -1){
+					else if (continue_inspection != -1) {
 						cout << "Выбран неверный ответ, запущен процесс выбора фильма\n";
 					}
 				} while (anotherfilm == true);
@@ -242,51 +242,51 @@ int main() {
 					}
 					if (currHallNumber > 0) currHallNumber -= 1;
 
-                    //вывод залов с заданным фильмом
-                    unsigned mins, hours;
-                    char UserChooseTime = 'N';
-                    Film chooseFilm;
-                    chooseFilm.setStart(23, 23, 23, 23, 23, 23);
-                    Film temp;
-                    temp.setStart(23, 23, 23, 23, 23, 23);
-                    cout << "Вы хотите выбрать время? (Y/N): ";
+					//вывод залов с заданным фильмом
+					unsigned mins, hours;
+					char UserChooseTime = 'N';
+					Film chooseFilm;
+					chooseFilm.setStart(23, 23, 23, 23, 23, 23);
+					Film temp;
+					temp.setStart(23, 23, 23, 23, 23, 23);
+					cout << "Вы хотите выбрать время? (Y/N): ";
 					while (!(cin >> UserChooseTime) || cin.peek() != 10 || (toupper(UserChooseTime) != 'N' && toupper(UserChooseTime) != 'Y')) {
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						cout << "Вы хотите выбрать время? (Y/N): ";
 					}
-                    if (UserChooseTime == 'Y') {
-                        do {
+					if (UserChooseTime == 'Y') {
+						do {
 							Film temp_film;
-                            for (size_t i{}; i != 8; ++i) {
-                                temp_film = hallsList[currHallNumber].getFilms(day)[i];
-                                if (filmNames[choose_number_film - 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime ) {
-                                    cout << "Время начала: "; hallsList[currHallNumber].getFilms(day)[i].getTimeStart().printTimeWithoutSeconds();
-									cout << '\n'; 
-                                }
-                            }
-                            cout << "Введите время начала фильма (часы и минуты через пробел): ";
+							for (size_t i{}; i != 8; ++i) {
+								temp_film = hallsList[currHallNumber].getFilms(day)[i];
+								if (filmNames[choose_number_film - 1] == temp_film.getName() && temp_film.getTimeStart() > CurrentTime) {
+									cout << "Время начала: "; hallsList[currHallNumber].getFilms(day)[i].getTimeStart().printTimeWithoutSeconds();
+									cout << '\n';
+								}
+							}
+							cout << "Введите время начала фильма (часы и минуты через пробел): ";
 							while (!(cin >> hours) || !(cin >> mins) || cin.peek() != 10 || (toupper(UserChooseTime) != 'N' && toupper(UserChooseTime) != 'Y')) {
 								cin.clear();
 								cin.ignore(numeric_limits<streamsize>::max(), '\n');
 								cout << "Введите время начала фильма (часы и минуты через пробел): ";
 							}
-                            for (size_t i{}; i != 8; ++i) {
-                                if (hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin() == mins) {
-                                    Time_t timee;
-                                    timee.setTime(hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getSec(), hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour(), CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
-                                    if (timee > CurrentTime) {
-                                        chooseFilm = hallsList[currHallNumber].getFilms(day)[i];
-                                    }
-                                }
-                            }
-                        } while (chooseFilm.getTimeStart() == temp.getTimeStart());
-                    }
+							for (size_t i{}; i != 8; ++i) {
+								if (hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getHour() == hours && hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin() == mins) {
+									Time_t timee;
+									timee.setTime(hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getSec(), hallsList[currHallNumber].getFilms(day)[i].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(1)[i].getTimeStart().getHour(), CurrentTime.getDay(), CurrentTime.getMonth(), CurrentTime.getYear());
+									if (timee > CurrentTime) {
+										chooseFilm = hallsList[currHallNumber].getFilms(day)[i];
+									}
+								}
+							}
+						} while (chooseFilm.getTimeStart() == temp.getTimeStart());
+					}
 
-					count_bilets = 0;					
+					count_bilets = 0;
 					hallsList[currHallNumber].PrintMatrix();
 					unsigned count_bilets;
-					cout << "Сколько билетов купить: "; 
+					cout << "Сколько билетов купить: ";
 					while (!(cin >> count_bilets) || cin.peek() != 10) {
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -294,8 +294,8 @@ int main() {
 					}
 					char showVariants;
 					bool choose_hand = false;
-					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): "; 
-					while (!(cin >> showVariants) || cin.peek() != 10 || (toupper(showVariants)!='Y' && toupper(showVariants)!='N')) {
+					cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
+					while (!(cin >> showVariants) || cin.peek() != 10 || (toupper(showVariants) != 'Y' && toupper(showVariants) != 'N')) {
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						cout << "Хотите увидеть варианты рассадки согласно купленным билетам? (Y/N): ";
@@ -309,14 +309,14 @@ int main() {
 					Time_t temp_t;
 
 					temp_t.setTime(0, hallsList[currHallNumber].getFilms(day)[choose_number_film - 1].getTimeStart().getMin(), hallsList[currHallNumber].getFilms(day)[choose_number_film - 1].getTimeStart().getHour(), 0, 0, 0);
-					hallsList[currHallNumber].addProfit(TicketCost(temp_t, hallsList[currHallNumber], 1, 1)*count_bilets);
+					hallsList[currHallNumber].addProfit(TicketCost(temp_t, hallsList[currHallNumber], 1, 1) * count_bilets);
 					complete = true;
-						
-                    }
-                    
-                
-            }
-			if (anotherday == true && day == 1 && complete==false) {
+
+				}
+
+
+			}
+			if (anotherday == true && day == 1 && complete == false) {
 
 				cout << "Вывод выбранного фильма на неделю\n";
 				Time_t temp_time;
@@ -348,7 +348,7 @@ int main() {
 				}
 				int curr_hall = -1;
 				cout << "Выберите день: ";
-				
+
 				while (!(cin >> choose_day) || cin.peek() != 10) {
 					cin.clear();
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -377,7 +377,7 @@ int main() {
 				if (curr_hall != -1) {
 					cout << "Рассадка на выбранный день\n";
 					hallsList[curr_hall].PrintMatrix();
-					cout << "Сколько билетов купить: "; 
+					cout << "Сколько билетов купить: ";
 					while (!(cin >> count_bilets) || cin.peek() != 10) {
 						cin.clear();
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -397,7 +397,7 @@ int main() {
 					// Ручной выбор мест
 					fillSeatsByUser(count_bilets, hallsList[curr_hall]);
 					hallsList[curr_hall].PrintMatrix();
-					hallsList[curr_hall].addProfit(250*count_bilets);
+					hallsList[curr_hall].addProfit(250 * count_bilets);
 					complete = true;
 				}
 				else {
@@ -408,7 +408,7 @@ int main() {
 
 
 			}
-        } while (anotherday == true && complete == false);
+		} while (anotherday == true && complete == false);
 
 		//Оплата
 		//userHall.addProfit(1/* счёт оплаты*/);
@@ -533,8 +533,8 @@ void fillSeatsByUser(unsigned humans, Hall currHall) {
 		do {
 			cout << "Выберете место для зрителя " << seat << " (r c): ";
 			cin >> currRow >> currCol;
-			
-		} while (!checkSeatStatus(currRow-1, currCol-1, currHall));
+
+		} while (!checkSeatStatus(currRow - 1, currCol - 1, currHall));
 		currHall.SetSeat(currRow - 1, currCol - 1);
 		seat++;
 	}
