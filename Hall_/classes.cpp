@@ -5,130 +5,172 @@
 #include <iomanip>
 using namespace std;
 
-class Seat {
+class Seans
+{
 private:
-    unsigned price_seat{ 0 };
-    bool vip_status{ false };
-    char status_seat{ '0' };
+    unsigned ID;
 
+    Hall seanceHall{};
+    Film seanceFilm{};
+
+    Time_t startTime{};
+    Time_t endTime{};
 public:
-
-    void setStatus(char status) {
-        status_seat = status;
+    void setHall(Hall s_hall) {
+        seanceHall = s_hall;
     }
 
-    char getStatus() {
-        return status_seat;
+    Hall getHall() {
+        return seanceHall;
     }
 
-    void setVip() {
-        vip_status = true;
+    void setID(unsigned s_id) {
+        ID = s_id;
     }
 
-    bool getVip() {
-        return vip_status;
+    unsigned getID() {
+        return ID;
     }
 
-    void setPrice(unsigned price) {
-        price_seat = price;
+    void setFilm(Film s_film) {
+        seanceFilm = s_film;
     }
 
-    int getPrice() {
-        return price_seat;
+    void setStartTime(Time_t s_starttime) {
+        startTime = s_starttime;
+    }
+
+    void setEndTime(Time_t s_endtime) {
+        endTime = s_endtime;
+    }
+
+    Time_t getEndTime() {
+        return endTime;
+    }
+
+    Time_t getStartTime() {
+        return startTime;
+    }
+
+    Film getFilm() {
+        return seanceFilm;
     }
 
 };
 
+class Day
+{
+private:
+    string date;
+    vector<Seans> seansList;
+public:
+    void setDate(string d_date) {
+        date = d_date;
+    }
+    string getDate() {
+        return date;
+    }
+
+    size_t getSeansListSize() {
+        return seansList.size();
+    }
+
+    vector<Seans> getSeansList() {
+        return seansList;
+    }
+
+    void addSeans(Seans d_seans) {
+        seansList.push_back(d_seans);
+    }
+    Seans getSeans(int d_seansnum) {
+        return seansList[d_seansnum];
+    }
+};
+
+class Seat
+{
+private:
+    unsigned price;
+    char status;
+public:
+    void setStatus(char s_status) {
+        status = s_status;
+    }
+    char getStatus() {
+        return status;
+    }
+
+    void setPrice(unsigned s_price) {
+        price = s_price;
+    }
+    unsigned getPrice() {
+        return price;
+    }
+};
+
 class Film {
 private:
-    string name{};
-    Time_t start{};
-    Time_t end{};
-    Time_t duration_film{};
-    string genre{};
+    string filmData[7];
 
+    Time_t duration{};
 public:
-    void setStart(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 1, unsigned months = 1, unsigned years = 1970) {
-        start.setTime(secs, mins, hours, days, months, years);
-    }
-    void setStart(Time_t startt) {
-        start = startt;
-    }
-    void setGenre(string string) {
-        genre = string;
-    }
-    string getGenre() {
-        return genre;
-    }
 
-    void setEnd(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 1, unsigned months = 1, unsigned years = 1970) {
-        end.setTime(secs, mins, hours, days, months, years);
-    }
-    void setDuration(unsigned secs, unsigned mins = 0, unsigned hours = 0, unsigned days = 0, unsigned months = 0, unsigned years = 0) {
-        Time_t duration;
-        duration.setTime(secs, mins, hours, days, months, years);
-        end = start + duration;
-    }
-    void setDuration(Time_t duration) {
-        end = start + duration;
-        duration_film = duration;
-    }
-
-    Time_t getDuration() {
-        return duration_film;
-    }
-    Time_t getTimeStart() {
-        return start;
-    }
-    Time_t getTimeEnd() {
-        return end;
+    void setFilmData(string Data[7]) {
+        for (int i{}; i < 7; i++) {
+            filmData[i] = Data[i];
+        }
     }
 
     string getName() {
-        return name;
+        return filmData[1];
     }
 
-    void setName(string names) {
-        name = names;
+    void printInfo() {
+        cout << left << setw(5) << filmData[0] << setw(20) << filmData[1] << setw(20) << filmData[2]
+            << setw(20) << filmData[3] << setw(20) << filmData[4]
+            << setw(20) << filmData[5] << '\n';
     }
+
+    void printDescription() {
+        cout << filmData[6] << '\n';
+    }
+
+    Time_t getDuration() {
+        duration.setTime(0, stoul(filmData[5]) % 60, stoul(filmData[5]) / 60, 0, 0, 0);
+        return duration;
+    }
+
 };
 
 class Hall
 {
 private:
+    unsigned ID;
+
+    string type;
     unsigned line{};
     unsigned seat{};
-    string name_hall = "";
+
     Seat** matrix{};
-    const size_t size = 7;
-    Film** films{};
-    unsigned profit{ 0 };
-    string type{ "" };
+
+    string hallData[4];
 public:
 
-    void SetType(string h_type) // добавлено
-    {
-        type = h_type; // добавление типа для объекта класса Зал.
+    unsigned getID() {
+        return ID;
     }
 
-    void SetName(string h_name) { // Имя кинозала
-        name_hall = h_name;
+    void setHallData(string Data[4]) {
+        for (int i{}; i < 4; i++) {
+            hallData[i] = Data[i];
+        }
     }
 
-    void SetMatrix(unsigned h_line, unsigned h_seat) { // задание матрицы мест 
-        line = h_line; seat = h_seat;
+    void setMatrix() { // задание матрицы мест 
         matrix = new Seat * [line] {};
-        films = new Film * [7] {};
         for (size_t i{}; i != line; ++i) {
             matrix[i] = new Seat[seat];
         }
-        for (size_t i{}; i != 7; ++i) {
-            films[i] = new Film[8]{};
-        }
-    }
-
-    void addProfit(unsigned money) {
-        profit += money;
     }
 
     unsigned getCollumns() {
@@ -139,35 +181,8 @@ public:
         return line;
     }
 
-    unsigned getProfit() {
-        return profit;
-    }
-
-    void addFilm(string name, Time_t start, Time_t duration, unsigned day) {
-        Film filmss;
-        filmss.setName(name);
-        filmss.setStart(start);
-        filmss.setDuration(duration);
-        for (size_t i{}; i != 8; ++i) {
-            if (films[day - 1][i].getName() == "") {
-                films[day - 1][i] = filmss;
-                return;
-            }
-        }
-    }
-
     Seat** getMatrix() {
         return matrix;
-    }
-
-    Film* getFilms(unsigned day) {
-        return films[day - 1];
-    }
-
-    void outputFilms(unsigned day) {
-        for (size_t i{}; i != 8; ++i) {
-            cout << films[day - 1][i].getName() << " ";
-        }
     }
 
     ~Hall() {
@@ -175,11 +190,6 @@ public:
             delete[] matrix[i];
         }
         delete[] matrix;
-        for (size_t i{}; i != 7; ++i) {
-            delete[] films[i];
-        }
-        delete[] films;
-
     }
 
     void SetSeat(size_t fs, size_t ls, size_t row) { // заполнение мест
@@ -210,10 +220,9 @@ public:
         cout << '\n';
     }
 
-    void PrintInfo() { // вывод информации о кинозале
-        cout << left << "Имя: " << setw(5) << name_hall << '\t' << "Рядов: " << setw(3) << line << '\t' <<
-            "Мест: " << setw(3) << seat << '\t' <<
-            "Тип: " << setw(8) << type << '\n';
+    void PrintInfo() {
+        cout << left << setw(5) << hallData[0] << setw(20) << hallData[1] << setw(20) << hallData[2]
+            << setw(20) << hallData[3] << '\n';
     }
 
     void randomFillSeats() { // рандомно сажаем людей :)
@@ -224,6 +233,7 @@ public:
             }
         }
     }
+
     void SetSeat(size_t i, size_t j) { // изменить статус места 
         matrix[i][j].setStatus('@');
     }
